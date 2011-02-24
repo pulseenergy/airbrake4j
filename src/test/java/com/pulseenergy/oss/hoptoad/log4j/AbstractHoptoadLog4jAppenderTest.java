@@ -14,8 +14,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.pulseenergy.oss.hoptoad.HoptoadNotification;
-import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.HttpClientHoptoadNotifier;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractHoptoadLog4jAppenderTest {
@@ -26,7 +26,8 @@ public class AbstractHoptoadLog4jAppenderTest {
 
 	private final class StubHoptoadLog4jAppender extends AbstractHoptoadLog4jAppender {
 		@Override
-		protected HoptoadNotifier buildHoptoadNotifier(final String apiKey, final String environment, final long timeoutInMillis, final String hoptoadUri) {
+		protected HttpClientHoptoadNotifier buildHoptoadNotifier(final String apiKey, final String environment, final long timeoutInMillis,
+		      final String hoptoadUri) {
 			return hoptoadNotifier;
 		}
 	}
@@ -38,9 +39,9 @@ public class AbstractHoptoadLog4jAppenderTest {
 	private final StubHoptoadLog4jAppender appender = new StubHoptoadLog4jAppender();
 
 	@Mock
-	private HoptoadNotifier hoptoadNotifier;
+	private HttpClientHoptoadNotifier hoptoadNotifier;
 	@Captor
-	private ArgumentCaptor<HoptoadNotification> notificationCaptor;
+	private ArgumentCaptor<Hoptoad4jNotice> notificationCaptor;
 
 	@Test
 	public void logSimpleExceptionProgrammatically() throws Exception {
@@ -52,10 +53,10 @@ public class AbstractHoptoadLog4jAppenderTest {
 		final LoggingEvent event = new LoggingEvent(getClass().getName(), LOGGER, Level.WARN, EXPECTED_MESSAGE, SIMPLE_EXCEPTION);
 		appender.doAppend(event);
 		verify(hoptoadNotifier).send(notificationCaptor.capture());
-		final HoptoadNotification notification = notificationCaptor.getValue();
+		final Hoptoad4jNotice notification = notificationCaptor.getValue();
 		assertThat(notification.getApiKey(), is(EXPECTED_API_KEY));
 		assertThat(notification.getVersion(), is(EXPECTED_VERSION));
 		assertThat(notification.getEnvironmentName(), is(EXPECTED_ENVIRONMENT));
-		assertThat(notification.getErrorBacktraceLines().size(), is(SIMPLE_EXCEPTION.getStackTrace().length + 1));
+		assertThat(notification.getThrowable(), is(SIMPLE_EXCEPTION));
 	}
 }

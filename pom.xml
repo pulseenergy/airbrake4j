@@ -1,16 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.pulseenergy.oss</groupId>
   <artifactId>hoptoad4j</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Hoptoad4j</name>
+  <url>https://github.com/pulseenergy/hoptoad4j</url>
   <prerequisites>
     <maven>3.0</maven>
   </prerequisites>
   <properties>
     <slf4j.version>1.6.0</slf4j.version>
   </properties>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.1</version>
+        <configuration>
+          <archive>
+            <index>true</index>
+            <manifest>
+            </manifest>
+            <manifestEntries>
+              <hoptoad4j-name>${project.artifactId}</hoptoad4j-name>
+              <hoptoad4j-version>${project.version}</hoptoad4j-version>
+              <hoptoad4j-url>${project.url}</hoptoad4j-url>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>commons-httpclient</groupId>
@@ -44,8 +65,22 @@
       <groupId>xom</groupId>
       <artifactId>xom</artifactId>
       <version>1.2.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xalan</groupId>
+          <artifactId>xalan</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
-    
+
     <!-- TEST DEPENDENCIES -->
     <dependency>
       <groupId>junit</groupId>

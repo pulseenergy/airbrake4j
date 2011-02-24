@@ -1,19 +1,17 @@
 package com.pulseenergy.oss.hoptoad.log4j;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
-import com.pulseenergy.oss.hoptoad.HoptoadNotification;
-import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.HttpClientHoptoadNotifier;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private boolean guard = false;
-	private HoptoadNotifier hoptoadNotifier;
+	private HttpClientHoptoadNotifier hoptoadNotifier;
 	private String apiKey;
 	private String environment;
 	private long timeoutInMillis;
@@ -27,7 +25,7 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		this.hoptoadNotifier = buildHoptoadNotifier(apiKey, environment, timeoutInMillis, hoptoadUri);
 	}
 
-	protected abstract HoptoadNotifier buildHoptoadNotifier(String apiKey, String environment, long timeoutInMillis, String hoptoadUri);
+	protected abstract HttpClientHoptoadNotifier buildHoptoadNotifier(String apiKey, String environment, long timeoutInMillis, String hoptoadUri);
 
 	@Override
 	protected synchronized void append(final LoggingEvent event) {
@@ -36,7 +34,7 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		}
 		guard = true;
 		try {
-			final HoptoadNotification notification = buildHoptoadNotification(event);
+			final Hoptoad4jNotice notification = buildHoptoadNotification(event);
 			try {
 				hoptoadNotifier.send(notification);
 			} catch (final IOException e) {
@@ -54,22 +52,16 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		return false;
 	}
 
-	private HoptoadNotification buildHoptoadNotification(final LoggingEvent event) {
-		final HoptoadNotification notification = new HoptoadNotification();
+	private Hoptoad4jNotice buildHoptoadNotification(final LoggingEvent event) {
+		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
 		notification.setApiKey(apiKey);
 		notification.setEnvironmentName(environment);
 		final ThrowableInformation throwableInformation = event.getThrowableInformation();
 		if (throwableInformation != null) {
-			final Throwable throwable = throwableInformation.getThrowable();
-			notification.setErrorClass(throwable.getClass().getName());
-			notification.setErrorBacktraceLines(stackTraceAsList(throwableInformation));
+			notification.populateThrowable(throwableInformation.getThrowable());
 		}
 		notification.setErrorMessage(event.getMessage().toString());
 		return notification;
-	}
-
-	private List<String> stackTraceAsList(final ThrowableInformation throwableInformation) {
-		return Arrays.asList(throwableInformation.getThrowableStrRep());
 	}
 
 	public void setApiKey(final String apiKey) {

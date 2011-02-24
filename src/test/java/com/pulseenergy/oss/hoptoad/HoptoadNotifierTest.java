@@ -19,29 +19,43 @@ import org.mockito.stubbing.Answer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HoptoadNotifierTest {
+	private final class ExecutePostMethodAnswer implements Answer<Integer> {
+		private final int httpStatus;
+
+		public ExecutePostMethodAnswer(final int httpStatus) {
+			this.httpStatus = httpStatus;
+		}
+
+		public Integer answer(final InvocationOnMock invocation) throws Throwable {
+			final PostMethod method = (PostMethod) invocation.getArguments()[0];
+			assertProperlyConfiguredMethod(method);
+			return httpStatus;
+		}
+	}
+
 	private static final String EXPECTED_CHARSET_NAME = "UTF-8";
 	private static final String EXPECTED_CONTENT_TYPE = "text/xml; charset=" + EXPECTED_CHARSET_NAME;
 	private static final String EXPECTED_URL = "http://unit.test/";
 	@Mock
 	private HttpClient httpClient;
-	private HoptoadNotifier hoptoadNotifier;
+	private HttpClientHoptoadNotifier hoptoadNotifier;
 
 	@Before
 	public void setUp() {
-		hoptoadNotifier = new HoptoadNotifier(httpClient, EXPECTED_URL);
+		hoptoadNotifier = new HttpClientHoptoadNotifier(httpClient, EXPECTED_URL);
 	}
 
 	@Test
 	public void sendErrorNotification() throws Exception {
-		final HoptoadNotification notification = new HoptoadNotification();
-		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new Answer<Integer>() {
-			public Integer answer(final InvocationOnMock invocation) throws Throwable {
-				final PostMethod method = (PostMethod) invocation.getArguments()[0];
-				assertProperlyConfiguredMethod(method);
-				return HttpStatus.SC_OK;
-			}
+		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
+		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_OK));
+		hoptoadNotifier.send(notification);
+	}
 
-		});
+	@Test
+	public void sendInvalidErrorNotification() throws Exception {
+		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
+		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_UNPROCESSABLE_ENTITY));
 		hoptoadNotifier.send(notification);
 	}
 
