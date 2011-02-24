@@ -5,6 +5,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 
 public class HoptoadXmlSerializer {
+	private static final String INDENT = "'      ";
+
 	public String serialize(final Hoptoad4jNotice notification) {
 		final Element root = new Element("notice");
 		addVersion(root, notification);
@@ -40,12 +42,15 @@ public class HoptoadXmlSerializer {
 	}
 
 	private void appendBacktraceLines(final Element backtrace, final Throwable throwable) {
+		final Element titleLine = new Element("line");
+		titleLine.addAttribute(new Attribute("file", throwable.getMessage()));
+		titleLine.addAttribute(new Attribute("number", ""));
+		backtrace.appendChild(titleLine);
 		for (final StackTraceElement element : throwable.getStackTrace()) {
 			final Element line = new Element("line");
-			line.addAttribute(new Attribute("file", element.getFileName()));
+			line.addAttribute(new Attribute("file", INDENT + element.getFileName()));
 			line.addAttribute(new Attribute("number", String.valueOf(element.getLineNumber())));
 			line.addAttribute(new Attribute("method", element.getMethodName()));
-			// line.appendChild(String.format("        at %s", element.toString()));
 			backtrace.appendChild(line);
 		}
 		if (throwable.getCause() != null) {

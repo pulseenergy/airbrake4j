@@ -24,7 +24,7 @@ public class HoptoadXmlSerializerTest {
 	@Test
 	public void serializeNested() {
 		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.populateThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException(EXPECTED_MESSAGE)));
+		notification.populateThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException("This is the nested exception")));
 		notification.setApiKey(EXPECTED_API_KEY);
 		final String xml = serializer.serialize(notification);
 		System.out.println(xml);
