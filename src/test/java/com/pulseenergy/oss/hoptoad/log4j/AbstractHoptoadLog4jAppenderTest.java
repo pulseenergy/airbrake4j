@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
-import com.pulseenergy.oss.hoptoad.HttpClientHoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractHoptoadLog4jAppenderTest {

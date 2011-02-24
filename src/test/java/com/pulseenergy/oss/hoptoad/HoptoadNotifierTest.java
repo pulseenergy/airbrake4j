@@ -17,6 +17,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
+
 @RunWith(MockitoJUnitRunner.class)
 public class HoptoadNotifierTest {
 	private final class ExecutePostMethodAnswer implements Answer<Integer> {

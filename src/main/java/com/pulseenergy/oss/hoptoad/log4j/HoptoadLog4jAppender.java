@@ -3,7 +3,7 @@ package com.pulseenergy.oss.hoptoad.log4j;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.params.HttpClientParams;
 
-import com.pulseenergy.oss.hoptoad.HttpClientHoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
 
 public class HoptoadLog4jAppender extends AbstractHoptoadLog4jAppender {
 

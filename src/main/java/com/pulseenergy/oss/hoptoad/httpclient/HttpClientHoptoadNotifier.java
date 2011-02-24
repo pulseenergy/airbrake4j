@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.hoptoad;
+package com.pulseenergy.oss.hoptoad.httpclient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,6 +11,9 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
+
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.HoptoadXmlSerializer;
 
 public class HttpClientHoptoadNotifier {
 	private static final String CHARSET_NAME = "UTF-8";

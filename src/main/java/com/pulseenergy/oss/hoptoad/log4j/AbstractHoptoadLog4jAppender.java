@@ -7,7 +7,7 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
-import com.pulseenergy.oss.hoptoad.HttpClientHoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private boolean guard = false;
