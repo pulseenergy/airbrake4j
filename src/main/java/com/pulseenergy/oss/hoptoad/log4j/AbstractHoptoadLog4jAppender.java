@@ -1,6 +1,7 @@
 package com.pulseenergy.oss.hoptoad.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
@@ -8,42 +9,28 @@ import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
-	private boolean guard = false;
-	private HoptoadNotifier hoptoadNotifier;
+	private HoptoadNotifier hoptoadNotifier = null;
 	private String apiKey;
 	private String environment;
 	private int timeoutInMillis;
 	private String hoptoadUri;
-
-	public AbstractHoptoadLog4jAppender() {
-	}
+	private boolean useSSL = false;
+	private final GuardedAppender guardedAppender = new GuardedAppender();
 
 	@Override
 	public void activateOptions() {
-		this.hoptoadNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri);
+		this.hoptoadNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri, useSSL);
 	}
 
-	protected abstract HoptoadNotifier buildHoptoadNotifier(int timeoutInMillis, String hoptoadUri);
+	protected abstract HoptoadNotifier buildHoptoadNotifier(int timeoutInMillis, String hoptoadUri, boolean useSSL);
 
 	@Override
-	protected synchronized void append(final LoggingEvent event) {
-		if (guard) {
-			return;
-		}
-		guard = true;
-		try {
-			final Hoptoad4jNotice notification = buildHoptoadNotification(event);
-			try {
-				hoptoadNotifier.send(notification);
-			} catch (final Exception e) {
-				getErrorHandler().error("Unable to send notification to Hoptoad", e, -1);
-			}
-		} finally {
-			guard = false;
-		}
+	protected void append(final LoggingEvent event) {
+		guardedAppender.append(event);
 	}
 
 	public void close() {
+		// Nothing to do
 	}
 
 	public boolean requiresLayout() {
@@ -78,4 +65,32 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		this.hoptoadUri = hoptoadUri;
 	}
 
+	public void setUseSSL(final boolean useSSL) {
+		this.useSSL = useSSL;
+	}
+
+	private class GuardedAppender {
+		private boolean guard = false;
+
+		public synchronized void append(final LoggingEvent event) {
+			if (guard) {
+				return;
+			}
+			guard = true;
+			try {
+				if (!event.getLevel().isGreaterOrEqual(Level.WARN)) {
+					return;
+				}
+				final Hoptoad4jNotice notification = buildHoptoadNotification(event);
+				try {
+					hoptoadNotifier.send(notification);
+				} catch (final Exception e) {
+					getErrorHandler().error("Unable to send notification to Hoptoad", e, -1);
+				}
+			} finally {
+				guard = false;
+			}
+		}
+
+	}
 }

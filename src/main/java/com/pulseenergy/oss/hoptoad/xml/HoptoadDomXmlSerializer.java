@@ -17,6 +17,15 @@ import org.w3c.dom.Element;
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 
 public class HoptoadDomXmlSerializer {
+	public static class XmlSerializationException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		XmlSerializationException(final String message, final Throwable t) {
+			super(message, t);
+		}
+
+	}
+
 	private static final String INDENT = "'      ";
 
 	public String serialize(final Hoptoad4jNotice notification) {
@@ -35,7 +44,7 @@ public class HoptoadDomXmlSerializer {
 		try {
 			return DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
 		} catch (final ParserConfigurationException e) {
-			throw new IllegalStateException("Could not create a DOM document", e);
+			throw new XmlSerializationException("Could not create a DOM document", e);
 		}
 	}
 
@@ -48,9 +57,9 @@ public class HoptoadDomXmlSerializer {
 			transformer.transform(new DOMSource(document), result);
 			return stringWriter.toString();
 		} catch (final TransformerConfigurationException e) {
-			throw new IllegalStateException("Could not create an XML Transformer", e);
+			throw new XmlSerializationException("Could not create an XML Transformer", e);
 		} catch (final TransformerException e) {
-			throw new RuntimeException("Could not convert DOM document to String result", e);
+			throw new XmlSerializationException("Could not convert DOM document to String result", e);
 		}
 	}
 

@@ -18,13 +18,22 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetHoptoadNotifier.class.getName());
 	private static final int DEFAULT_TIMEOUT = 5000;
+	private static final String DEFAULT_HOPTOAD_URI = "http://hoptoadapp.com/notifier_api/v2/notices";
 	private final int timeoutInMillis;
 	private final HoptoadDomXmlSerializer serializer = new HoptoadDomXmlSerializer();
 	private final String hoptoadUri;
 
-	public AbstractJavaNetHoptoadNotifier(final String hoptoadUri, final int timeoutInMillis) {
-		this.hoptoadUri = hoptoadUri;
+	public AbstractJavaNetHoptoadNotifier(final String hoptoadUri, final int timeoutInMillis, final boolean useSSL) {
+		this.hoptoadUri = buildHoptoadUri(hoptoadUri, useSSL);
 		this.timeoutInMillis = (timeoutInMillis < 1) ? DEFAULT_TIMEOUT : timeoutInMillis;
+	}
+
+	private String buildHoptoadUri(final String hoptoadUri, final boolean useSSL) {
+		final String uri = isEmpty(hoptoadUri) ? DEFAULT_HOPTOAD_URI : hoptoadUri;
+		if (useSSL && uri.startsWith("http://")) {
+			return uri.replaceFirst("http://", "https://");
+		}
+		return uri;
 	}
 
 	public void send(final Hoptoad4jNotice notification) throws IOException {
@@ -67,6 +76,14 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 		} catch (final IOException e) {
 			LOGGER.log(Level.SEVERE, "Unable to close IO resource", e);
 		}
+	}
+
+	private static boolean isEmpty(final String value) {
+		if (value == null) {
+			return true;
+		}
+
+		return value.trim().length() == 0;
 	}
 
 }

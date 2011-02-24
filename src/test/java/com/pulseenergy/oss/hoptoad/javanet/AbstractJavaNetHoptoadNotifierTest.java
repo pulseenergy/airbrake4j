@@ -22,7 +22,7 @@ import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 public class AbstractJavaNetHoptoadNotifierTest {
 	private class StubJavaNetHoptoadNotifier extends AbstractJavaNetHoptoadNotifier {
 		public StubJavaNetHoptoadNotifier(final String hoptoadUri, final int timeoutInMillis) {
-			super(hoptoadUri, timeoutInMillis);
+			super(hoptoadUri, timeoutInMillis, true);
 		}
 
 		@Override
@@ -42,7 +42,7 @@ public class AbstractJavaNetHoptoadNotifierTest {
 	@Test
 	public void send() throws Exception {
 		final int expectedTimeout = 1999;
-		final HoptoadNotifier notifier = new StubJavaNetHoptoadNotifier("test", expectedTimeout);
+		final HoptoadNotifier notifier = new StubJavaNetHoptoadNotifier(null, expectedTimeout);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		notifier.send(new Hoptoad4jNotice());
 		verify(httpConnection).setConnectTimeout(expectedTimeout);

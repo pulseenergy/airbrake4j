@@ -6,7 +6,7 @@ import com.pulseenergy.oss.hoptoad.javanet.JavaNetHoptoadNotifier;
 public class HoptoadLog4jAppender extends AbstractHoptoadLog4jAppender {
 
 	@Override
-	protected HoptoadNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri) {
-		return new JavaNetHoptoadNotifier(hoptoadUri, timeoutInMillis);
+	protected HoptoadNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, final boolean useSSL) {
+		return new JavaNetHoptoadNotifier(hoptoadUri, timeoutInMillis, useSSL);
 	}
 }

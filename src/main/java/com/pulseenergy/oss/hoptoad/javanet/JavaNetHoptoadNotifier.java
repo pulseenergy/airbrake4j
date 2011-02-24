@@ -6,8 +6,8 @@ import java.net.URL;
 
 public class JavaNetHoptoadNotifier extends AbstractJavaNetHoptoadNotifier {
 
-	public JavaNetHoptoadNotifier(final String hoptoadUri, final int timeoutInMillis) {
-		super(hoptoadUri, timeoutInMillis);
+	public JavaNetHoptoadNotifier(final String hoptoadUri, final int timeoutInMillis, final boolean useSSL) {
+		super(hoptoadUri, timeoutInMillis, useSSL);
 	}
 
 	@Override

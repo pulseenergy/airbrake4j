@@ -3,6 +3,7 @@ package com.pulseenergy.oss.hoptoad.log4j;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -27,7 +28,7 @@ public class AbstractHoptoadLog4jAppenderTest {
 
 	private final class StubHoptoadLog4jAppender extends AbstractHoptoadLog4jAppender {
 		@Override
-		protected HoptoadNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri) {
+		protected HoptoadNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, boolean useSSL) {
 			return hoptoadNotifier;
 		}
 	}
@@ -58,5 +59,19 @@ public class AbstractHoptoadLog4jAppenderTest {
 		assertThat(notification.getVersion(), is(EXPECTED_VERSION));
 		assertThat(notification.getEnvironmentName(), is(EXPECTED_ENVIRONMENT));
 		assertThat(notification.getThrowable(), is(SIMPLE_EXCEPTION));
+	}
+
+	@Test
+	public void doesNotLogInfoAndBelow() throws Exception {
+		appender.setApiKey(EXPECTED_API_KEY);
+		appender.setEnvironment(EXPECTED_ENVIRONMENT);
+		appender.setTimeoutInMillis(EXPECTED_TIMEOUT);
+		appender.setHoptoadUri(EXPECTED_URI);
+		appender.activateOptions();
+		final LoggingEvent infoEvent = new LoggingEvent(getClass().getName(), LOGGER, Level.INFO, EXPECTED_MESSAGE, SIMPLE_EXCEPTION);
+		final LoggingEvent debugEvent = new LoggingEvent(getClass().getName(), LOGGER, Level.DEBUG, EXPECTED_MESSAGE, SIMPLE_EXCEPTION);
+		appender.doAppend(infoEvent);
+		appender.doAppend(debugEvent);
+		verifyNoMoreInteractions(hoptoadNotifier);
 	}
 }
