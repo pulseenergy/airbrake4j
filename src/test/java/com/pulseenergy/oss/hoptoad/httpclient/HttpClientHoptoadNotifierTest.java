@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.hoptoad;
+package com.pulseenergy.oss.hoptoad.httpclient;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -17,10 +17,12 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HoptoadNotifierTest {
+public class HttpClientHoptoadNotifierTest {
 	private final class ExecutePostMethodAnswer implements Answer<Integer> {
 		private final int httpStatus;
 
@@ -40,7 +42,7 @@ public class HoptoadNotifierTest {
 	private static final String EXPECTED_URL = "http://unit.test/";
 	@Mock
 	private HttpClient httpClient;
-	private HttpClientHoptoadNotifier hoptoadNotifier;
+	private HoptoadNotifier hoptoadNotifier;
 
 	@Before
 	public void setUp() {

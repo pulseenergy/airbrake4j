@@ -5,14 +5,14 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
-import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private boolean guard = false;
-	private HttpClientHoptoadNotifier hoptoadNotifier;
+	private HoptoadNotifier hoptoadNotifier;
 	private String apiKey;
 	private String environment;
-	private long timeoutInMillis;
+	private int timeoutInMillis;
 	private String hoptoadUri;
 
 	public AbstractHoptoadLog4jAppender() {
@@ -20,10 +20,10 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 
 	@Override
 	public void activateOptions() {
-		this.hoptoadNotifier = buildHoptoadNotifier(apiKey, environment, timeoutInMillis, hoptoadUri);
+		this.hoptoadNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri);
 	}
 
-	protected abstract HttpClientHoptoadNotifier buildHoptoadNotifier(String apiKey, String environment, long timeoutInMillis, String hoptoadUri);
+	protected abstract HoptoadNotifier buildHoptoadNotifier(int timeoutInMillis, String hoptoadUri);
 
 	@Override
 	protected synchronized void append(final LoggingEvent event) {
@@ -70,7 +70,7 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		this.environment = environment;
 	}
 
-	public void setTimeoutInMillis(final long timeoutInMillis) {
+	public void setTimeoutInMillis(final int timeoutInMillis) {
 		this.timeoutInMillis = timeoutInMillis;
 	}
 

@@ -13,15 +13,16 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
-import com.pulseenergy.oss.hoptoad.xml.HoptoadXmlSerializer;
+import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.xml.HoptoadDomXmlSerializer;
 
-public class HttpClientHoptoadNotifier {
+public class HttpClientHoptoadNotifier implements HoptoadNotifier {
 	private static final String CHARSET_NAME = "UTF-8";
 	private static final String CONTENT_TYPE = "text/xml";
 	private static final String DEFAULT_HOPTOAD_URI = "http://hoptoadapp.com/notifier_api/v2/notices";
 	private final HttpClient httpClient;
 	private final String hoptoadUri;
-	private final HoptoadXmlSerializer serializer = new HoptoadXmlSerializer();
+	private final HoptoadDomXmlSerializer serializer = new HoptoadDomXmlSerializer();
 
 	public HttpClientHoptoadNotifier(final HttpClient httpClient) {
 		this(httpClient, null);

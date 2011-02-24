@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 import com.pulseenergy.oss.hoptoad.httpclient.HttpClientHoptoadNotifier;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -26,8 +27,7 @@ public class AbstractHoptoadLog4jAppenderTest {
 
 	private final class StubHoptoadLog4jAppender extends AbstractHoptoadLog4jAppender {
 		@Override
-		protected HttpClientHoptoadNotifier buildHoptoadNotifier(final String apiKey, final String environment, final long timeoutInMillis,
-		      final String hoptoadUri) {
+		protected HoptoadNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri) {
 			return hoptoadNotifier;
 		}
 	}

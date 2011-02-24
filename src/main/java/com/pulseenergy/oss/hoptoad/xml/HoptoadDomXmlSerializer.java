@@ -11,7 +11,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.commons.lang.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -112,7 +111,11 @@ public class HoptoadDomXmlSerializer {
 
 	private static Element buildTextElement(final Document document, final String elementName, final String text) {
 		final Element textElement = document.createElement(elementName);
-		textElement.appendChild(document.createTextNode(StringUtils.trimToEmpty(text)));
+		textElement.appendChild(document.createTextNode(trimToEmpty(text)));
 		return textElement;
+	}
+
+	private static String trimToEmpty(final String text) {
+		return text == null ? "" : text.trim();
 	}
 }
