@@ -1,7 +1,5 @@
 package com.pulseenergy.oss.hoptoad.log4j;
 
-import java.io.IOException;
-
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
@@ -37,7 +35,7 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 			final Hoptoad4jNotice notification = buildHoptoadNotification(event);
 			try {
 				hoptoadNotifier.send(notification);
-			} catch (final IOException e) {
+			} catch (final Exception e) {
 				getErrorHandler().error("Unable to send notification to Hoptoad", e, -1);
 			}
 		} finally {

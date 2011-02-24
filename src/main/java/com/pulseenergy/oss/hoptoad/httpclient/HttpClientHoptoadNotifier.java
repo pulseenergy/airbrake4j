@@ -13,7 +13,7 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
-import com.pulseenergy.oss.hoptoad.HoptoadXmlSerializer;
+import com.pulseenergy.oss.hoptoad.xml.HoptoadXmlSerializer;
 
 public class HttpClientHoptoadNotifier {
 	private static final String CHARSET_NAME = "UTF-8";

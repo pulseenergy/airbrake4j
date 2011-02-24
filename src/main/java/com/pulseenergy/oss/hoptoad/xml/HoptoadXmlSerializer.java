@@ -1,4 +1,6 @@
-package com.pulseenergy.oss.hoptoad;
+package com.pulseenergy.oss.hoptoad.xml;
+
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 
 import nu.xom.Attribute;
 import nu.xom.Document;

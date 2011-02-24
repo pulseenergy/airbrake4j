@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.hoptoad;
+package com.pulseenergy.oss.hoptoad.xml;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -17,6 +17,8 @@ import javax.xml.validation.Validator;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Test;
 import org.xml.sax.SAXException;
+
+import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 
 public class HoptoadXmlSerializerTest {
 	private static final String HOPTOAD_NOTICE_SCHEMA = "/hoptoad-notice_2_0.xsd";
