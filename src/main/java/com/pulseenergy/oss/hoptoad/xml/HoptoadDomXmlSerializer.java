@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 
 public class HoptoadDomXmlSerializer {
+	private static final String CAUSED_BY = "Caused by ";
+
 	public static class XmlSerializationException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 
@@ -81,15 +83,16 @@ public class HoptoadDomXmlSerializer {
 		if (throwable == null) {
 			backtrace.appendChild(buildTextElement(document, "line", "NO STACK TRACE PROVIDED"));
 		} else {
-			appendBacktraceLines(document, backtrace, throwable);
+			appendBacktraceLines(document, backtrace, throwable, 0);
 		}
 		error.appendChild(backtrace);
 		noticeElement.appendChild(error);
 	}
 
-	private void appendBacktraceLines(final Document document, final Element backtrace, final Throwable throwable) {
+	private void appendBacktraceLines(final Document document, final Element backtrace, final Throwable throwable, final int level) {
 		final Element titleLine = document.createElement("line");
-		titleLine.setAttribute("file", throwable.getMessage());
+		final String prefix = level > 0 ? CAUSED_BY : "";
+		titleLine.setAttribute("file", String.format("%s%s: %s", prefix, throwable.getClass().getName(), throwable.getMessage()));
 		titleLine.setAttribute("number", "");
 		backtrace.appendChild(titleLine);
 		for (final StackTraceElement element : throwable.getStackTrace()) {
@@ -100,7 +103,7 @@ public class HoptoadDomXmlSerializer {
 			backtrace.appendChild(line);
 		}
 		if (throwable.getCause() != null) {
-			appendBacktraceLines(document, backtrace, throwable.getCause());
+			appendBacktraceLines(document, backtrace, throwable.getCause(), level + 1);
 		}
 	}
 

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
@@ -44,12 +46,23 @@ public class AbstractJavaNetHoptoadNotifierTest {
 		final int expectedTimeout = 1999;
 		final HoptoadNotifier notifier = new StubJavaNetHoptoadNotifier(null, expectedTimeout);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
+		when(httpConnection.getResponseCode()).thenReturn(200);
 		notifier.send(new Hoptoad4jNotice());
 		verify(httpConnection).setConnectTimeout(expectedTimeout);
+		verify(httpConnection).setReadTimeout(expectedTimeout);
 		verify(outputStream).write(byteArrayCaptor.capture());
 		verify(outputStream).close();
 		verify(httpConnection).disconnect();
 		final String data = new String(byteArrayCaptor.getValue(), "UTF-8");
 		assertThat(data.isEmpty(), is(false));
+	}
+
+	@Test(expected = IOException.class)
+	public void sendResultsInFailureFromHoptoad() throws Exception {
+		final HoptoadNotifier notifier = new StubJavaNetHoptoadNotifier(null, 1999);
+		when(httpConnection.getOutputStream()).thenReturn(outputStream);
+		when(httpConnection.getResponseCode()).thenReturn(413);
+		when(httpConnection.getInputStream()).thenReturn(new ByteArrayInputStream("THIS IS THE RESPONSE".getBytes()));
+		notifier.send(new Hoptoad4jNotice());
 	}
 }

@@ -1,7 +1,9 @@
 package com.pulseenergy.oss.hoptoad.javanet;
 
+import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -15,10 +17,12 @@ import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
 import com.pulseenergy.oss.hoptoad.xml.HoptoadDomXmlSerializer;
 
 public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier {
+	private static final String ERR_UNEXPECTED_RESPONSE = "Hoptoad responded with an unexpected response code %d:\n%s\n\nSupplied XML:\n%s";
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetHoptoadNotifier.class.getName());
 	private static final int DEFAULT_TIMEOUT = 5000;
 	private static final String DEFAULT_HOPTOAD_URI = "http://hoptoadapp.com/notifier_api/v2/notices";
+	private static final int HTTP_OK = 200;
 	private final int timeoutInMillis;
 	private final HoptoadDomXmlSerializer serializer = new HoptoadDomXmlSerializer();
 	private final String hoptoadUri;
@@ -40,9 +44,40 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 		final String xml = serializer.serialize(notification);
 		final HttpURLConnection connection = getHoptoadConnection(hoptoadUri);
 		connection.setConnectTimeout(timeoutInMillis);
+		connection.setReadTimeout(timeoutInMillis);
 		connection.setDoOutput(true);
 		connection.setRequestMethod("POST");
 		connection.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
+		connection.connect();
+		try {
+			writeXmlToHoptoad(xml, connection);
+			final int responseCode = connection.getResponseCode();
+
+			if (responseCode != HTTP_OK) {
+				final String response = readHoptoadResponse(connection);
+				throw new IOException(String.format(ERR_UNEXPECTED_RESPONSE, responseCode, response, xml));
+			}
+		} finally {
+			connection.disconnect();
+		}
+	}
+
+	private String readHoptoadResponse(final HttpURLConnection connection) throws IOException {
+		BufferedReader reader = null;
+		try {
+			reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = null;
+			final StringBuilder buffer = new StringBuilder();
+			while ((line = reader.readLine()) != null) {
+				buffer.append(line);
+			}
+			return buffer.toString();
+		} finally {
+			safeClose(reader);
+		}
+	}
+
+	private void writeXmlToHoptoad(final String xml, final HttpURLConnection connection) throws IOException {
 		OutputStream out = null;
 		try {
 			out = connection.getOutputStream();
@@ -50,8 +85,6 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 		} finally {
 			safeClose(out);
 		}
-		connection.getResponseCode();
-		connection.disconnect();
 	}
 
 	protected abstract HttpURLConnection getHoptoadConnection(String hoptoadUri) throws IOException;
