@@ -54,7 +54,7 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 			final int responseCode = connection.getResponseCode();
 
 			if (responseCode != HTTP_OK) {
-				final String response = readHoptoadResponse(connection);
+				final String response = readHoptoadErrorResponse(connection);
 				throw new IOException(String.format(ERR_UNEXPECTED_RESPONSE, responseCode, response, xml));
 			}
 		} finally {
@@ -62,10 +62,10 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 		}
 	}
 
-	private String readHoptoadResponse(final HttpURLConnection connection) throws IOException {
+	private String readHoptoadErrorResponse(final HttpURLConnection connection) throws IOException {
 		BufferedReader reader = null;
 		try {
-			reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
 			String line = null;
 			final StringBuilder buffer = new StringBuilder();
 			while ((line = reader.readLine()) != null) {

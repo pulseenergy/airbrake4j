@@ -81,9 +81,9 @@ public class HoptoadDomXmlSerializer {
 		error.appendChild(buildTextElement(document, "class", notification.getErrorClass()));
 		final Element backtrace = document.createElement("backtrace");
 		final Throwable throwable = notification.getThrowable();
-		if (throwable == null) {
-			backtrace.appendChild(buildTextElement(document, "line", "NO STACK TRACE PROVIDED"));
-		} else {
+		final Element line = buildLine(document, "", notification.getErrorClass(), 0, "");
+		backtrace.appendChild(line);
+		if (throwable != null) {
 			appendBacktraceLines(document, backtrace, throwable, 0);
 		}
 		error.appendChild(backtrace);
@@ -97,15 +97,20 @@ public class HoptoadDomXmlSerializer {
 		titleLine.setAttribute("number", "");
 		backtrace.appendChild(titleLine);
 		for (final StackTraceElement element : throwable.getStackTrace()) {
-			final Element line = document.createElement("line");
-			line.setAttribute("file", INDENT + element.getFileName());
-			line.setAttribute("number", String.valueOf(element.getLineNumber()));
-			line.setAttribute("method", element.getMethodName());
+			final Element line = buildLine(document, INDENT, element.getFileName(), element.getLineNumber(), element.getMethodName());
 			backtrace.appendChild(line);
 		}
 		if (throwable.getCause() != null) {
 			appendBacktraceLines(document, backtrace, throwable.getCause(), level + 1);
 		}
+	}
+
+	private Element buildLine(final Document document, final String indent, final String fileName, final int lineNumber, final String methodName) {
+		final Element line = document.createElement("line");
+		line.setAttribute("file", indent + fileName);
+		line.setAttribute("number", String.valueOf(lineNumber));
+		line.setAttribute("method", methodName);
+		return line;
 	}
 
 	private void addNotifierInfo(final Document document, final Element notice, final Hoptoad4jNotice notification) {
@@ -128,8 +133,11 @@ public class HoptoadDomXmlSerializer {
 		final Element nodeName = buildTextElement(document, "var", notification.getNodeName());
 		nodeName.setAttribute("key", "nodeName");
 		cgiData.appendChild(nodeName);
+		final Element componentName = buildTextElement(document, "var", notification.getComponentName());
+		componentName.setAttribute("key", "componentName");
+		cgiData.appendChild(componentName);
 		request.appendChild(buildTextElement(document, "url", ""));
-		request.appendChild(buildTextElement(document, "component", notification.getComponentName()));
+		request.appendChild(buildTextElement(document, "component", notification.getErrorClass()));
 		request.appendChild(cgiData);
 		noticeElement.appendChild(request);
 	}

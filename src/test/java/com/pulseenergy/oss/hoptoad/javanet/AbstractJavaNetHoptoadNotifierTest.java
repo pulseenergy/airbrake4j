@@ -58,11 +58,11 @@ public class AbstractJavaNetHoptoadNotifierTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void sendResultsInFailureFromHoptoad() throws Exception {
+	public void sendResultingInFailureFromHoptoad() throws Exception {
 		final HoptoadNotifier notifier = new StubJavaNetHoptoadNotifier(null, 1999);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(413);
-		when(httpConnection.getInputStream()).thenReturn(new ByteArrayInputStream("THIS IS THE RESPONSE".getBytes()));
+		when(httpConnection.getErrorStream()).thenReturn(new ByteArrayInputStream("THIS IS THE RESPONSE".getBytes()));
 		notifier.send(new Hoptoad4jNotice());
 	}
 }
