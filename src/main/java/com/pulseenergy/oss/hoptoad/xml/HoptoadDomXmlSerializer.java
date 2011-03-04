@@ -39,6 +39,7 @@ public class HoptoadDomXmlSerializer {
 		addNotifierInfo(document, notice, notification);
 		addErrorInfo(document, notice, notification);
 		addServerEnvironment(document, notice, notification);
+		addRequest(document, notice, notification);
 		return generateXml(document);
 	}
 
@@ -119,6 +120,18 @@ public class HoptoadDomXmlSerializer {
 		final Element serverEnvironment = document.createElement("server-environment");
 		serverEnvironment.appendChild(buildTextElement(document, "environment-name", notification.getEnvironmentName()));
 		noticeElement.appendChild(serverEnvironment);
+	}
+
+	private void addRequest(final Document document, final Element noticeElement, final Hoptoad4jNotice notification) {
+		final Element request = document.createElement("request");
+		final Element cgiData = document.createElement("cgi-data");
+		final Element nodeName = buildTextElement(document, "var", notification.getNodeName());
+		nodeName.setAttribute("key", "nodeName");
+		cgiData.appendChild(nodeName);
+		request.appendChild(buildTextElement(document, "url", ""));
+		request.appendChild(buildTextElement(document, "component", notification.getComponentName()));
+		request.appendChild(cgiData);
+		noticeElement.appendChild(request);
 	}
 
 	private static Element buildTextElement(final Document document, final String elementName, final String text) {

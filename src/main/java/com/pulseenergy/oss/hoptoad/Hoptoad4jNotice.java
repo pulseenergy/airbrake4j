@@ -32,6 +32,8 @@ public class Hoptoad4jNotice {
 
 	private String environmentName; // Required. The name of the server environment in which the error occurred, such as "staging" or "production."
 	private Throwable throwable;
+	private String nodeName;
+	private String componentName;
 
 	public String getApiKey() {
 		return apiKey;
@@ -89,15 +91,28 @@ public class Hoptoad4jNotice {
 		return version;
 	}
 
-	public void populateThrowable(final Throwable throwable) {
+	public void setThrowable(final Throwable throwable) {
 		this.throwable = throwable;
-		setErrorMessage(throwable.getMessage());
-		setErrorClass(throwable.getClass().getName());
-
 	}
 
 	public Throwable getThrowable() {
 		return throwable;
+	}
+
+	public String getNodeName() {
+		return nodeName;
+	}
+
+	public void setNodeName(final String nodeName) {
+		this.nodeName = nodeName;
+	}
+
+	public String getComponentName() {
+		return componentName;
+	}
+
+	public void setComponentName(final String appName) {
+		this.componentName = appName;
 	}
 
 }

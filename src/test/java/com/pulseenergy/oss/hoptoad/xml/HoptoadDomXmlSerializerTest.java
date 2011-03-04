@@ -30,7 +30,7 @@ public class HoptoadDomXmlSerializerTest {
 	@Test
 	public void serialize() throws Exception {
 		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.populateThrowable(new RuntimeException(EXPECTED_MESSAGE));
+		notification.setThrowable(new RuntimeException(EXPECTED_MESSAGE));
 		notification.setApiKey(EXPECTED_API_KEY);
 		final String xml = serializer.serialize(notification);
 		assertThat(StringUtils.isEmpty(xml), is(false));
@@ -40,7 +40,7 @@ public class HoptoadDomXmlSerializerTest {
 	@Test
 	public void serializeNested() throws Exception {
 		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.populateThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException("This is the nested exception")));
+		notification.setThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException("This is the nested exception")));
 		notification.setApiKey(EXPECTED_API_KEY);
 		final String xml = serializer.serialize(notification);
 		assertThat(StringUtils.isEmpty(xml), is(false));

@@ -1,7 +1,6 @@
 package com.pulseenergy.oss.hoptoad.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Level;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
@@ -16,6 +15,8 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private String hoptoadUri;
 	private boolean useSSL = false;
 	private final GuardedAppender guardedAppender = new GuardedAppender();
+	private String nodeName;
+	private String componentName;
 
 	@Override
 	public void activateOptions() {
@@ -43,9 +44,12 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		notification.setEnvironmentName(environment);
 		final ThrowableInformation throwableInformation = event.getThrowableInformation();
 		if (throwableInformation != null) {
-			notification.populateThrowable(throwableInformation.getThrowable());
+			notification.setThrowable(throwableInformation.getThrowable());
 		}
 		notification.setErrorMessage(event.getMessage().toString());
+		notification.setErrorClass(event.getLoggerName());
+		notification.setNodeName(nodeName);
+		notification.setComponentName(componentName);
 		return notification;
 	}
 
@@ -69,6 +73,14 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		this.useSSL = useSSL;
 	}
 
+	public void setNodeName(final String nodeName) {
+		this.nodeName = nodeName;
+	}
+
+	public void setComponentName(final String componentName) {
+		this.componentName = componentName;
+	}
+
 	private class GuardedAppender {
 		private boolean guard = false;
 
@@ -78,9 +90,6 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 			}
 			guard = true;
 			try {
-				if (!event.getLevel().isGreaterOrEqual(Level.WARN)) {
-					return;
-				}
 				final Hoptoad4jNotice notification = buildHoptoadNotification(event);
 				try {
 					hoptoadNotifier.send(notification);
