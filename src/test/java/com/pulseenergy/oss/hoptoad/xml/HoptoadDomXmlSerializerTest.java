@@ -36,6 +36,7 @@ public class HoptoadDomXmlSerializerTest {
 		final String xml = serializer.serialize(notification);
 		assertThat(StringUtils.isEmpty(xml), is(false));
 		validateXml(xml);
+		assertThat(xml, xml.indexOf(ThrowableData.class.getName()), is(-1));
 	}
 
 	@Test

@@ -94,7 +94,7 @@ public class HoptoadDomXmlSerializer {
 	private void appendBacktraceLines(final Document document, final Element backtrace, final ThrowableData throwableData, final int level) {
 		final Element titleLine = document.createElement("line");
 		final String prefix = level > 0 ? CAUSED_BY : "";
-		titleLine.setAttribute("file", String.format("%s%s: %s", prefix, throwableData.getClass().getName(), throwableData.getMessage()));
+		titleLine.setAttribute("file", String.format("%s%s: %s", prefix, throwableData.getClassName(), throwableData.getMessage()));
 		titleLine.setAttribute("number", "");
 		backtrace.appendChild(titleLine);
 		for (final StackTraceElement element : throwableData.getStackTrace()) {
