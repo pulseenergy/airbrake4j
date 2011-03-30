@@ -1,0 +1,41 @@
+package com.pulseenergy.oss.hoptoad;
+
+public abstract class AbstractHoptoadNotificationBuilder<T, U> {
+	private final String apiKey;
+	private final String environment;
+	private final String nodeName;
+	private final String componentName;
+
+	protected AbstractHoptoadNotificationBuilder(final String apiKey, final String environment, final String nodeName, final String componentName) {
+		this.apiKey = apiKey;
+		this.environment = environment;
+		this.nodeName = nodeName;
+		this.componentName = componentName;
+	}
+
+	public final Hoptoad4jNotice build(final T event) {
+		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
+		notification.setApiKey(apiKey);
+		notification.setEnvironmentName(environment);
+		final U throwableInformation = getThrowableDataSource(event);
+		if (throwableInformation != null) {
+			notification.setThrowableData(extractThrowableData(throwableInformation));
+		}
+		notification.setErrorMessage(getMessage(event));
+		notification.setErrorClass(getErrorClassName(event));
+		notification.setNodeName(nodeName);
+		notification.setComponentName(componentName);
+		return notification;
+	}
+
+
+	protected abstract U getThrowableDataSource(final T event);
+
+	protected abstract  String getErrorClassName(final T event);
+
+	protected abstract  String getMessage(final T event);
+
+	protected abstract  ThrowableData extractThrowableData(final U proxy);
+
+
+}

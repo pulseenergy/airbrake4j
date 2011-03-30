@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Hoptoad4jNotice {
-	private static String notifierName;
-	private static String notifierVersion;
-	private static String notifierUrl;
+	private static final String notifierName;
+	private static final String notifierVersion;
+	private static final String notifierUrl;
 
 	static {
 		final Properties hoptoadProperties = new Properties();

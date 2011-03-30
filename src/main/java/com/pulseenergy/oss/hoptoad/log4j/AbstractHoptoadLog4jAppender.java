@@ -2,11 +2,9 @@ package com.pulseenergy.oss.hoptoad.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
-import org.apache.log4j.spi.ThrowableInformation;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
-import com.pulseenergy.oss.hoptoad.ThrowableData;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private HoptoadNotifier hoptoadNotifier = null;
@@ -18,10 +16,12 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private final GuardedAppender guardedAppender = new GuardedAppender();
 	private String nodeName;
 	private String componentName;
+	private Log4jHoptoadNotificationBuilder notificationBuilder;
 
 	@Override
 	public void activateOptions() {
 		this.hoptoadNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri, useSSL);
+		this.notificationBuilder = new Log4jHoptoadNotificationBuilder(apiKey, environment, nodeName, componentName);
 	}
 
 	protected abstract HoptoadNotifier buildHoptoadNotifier(int timeoutInMillis, String hoptoadUri, boolean useSSL);
@@ -37,25 +37,6 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 
 	public boolean requiresLayout() {
 		return false;
-	}
-
-	private Hoptoad4jNotice buildHoptoadNotification(final LoggingEvent event) {
-		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.setApiKey(apiKey);
-		notification.setEnvironmentName(environment);
-		final ThrowableInformation throwableInformation = event.getThrowableInformation();
-		if (throwableInformation != null) {
-			notification.setThrowableData(extractThrowableData(throwableInformation.getThrowable()));
-		}
-		notification.setErrorMessage(event.getMessage().toString());
-		notification.setErrorClass(event.getLoggerName());
-		notification.setNodeName(nodeName);
-		notification.setComponentName(componentName);
-		return notification;
-	}
-
-	private ThrowableData extractThrowableData(final Throwable throwable) {
-		return ThrowableData.fromThrowable(throwable);
 	}
 
 	public void setApiKey(final String apiKey) {
@@ -95,7 +76,7 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 			}
 			guard = true;
 			try {
-				final Hoptoad4jNotice notification = buildHoptoadNotification(event);
+				final Hoptoad4jNotice notification = notificationBuilder.build(event);
 				try {
 					hoptoadNotifier.send(notification);
 				} catch (final Exception e) {
@@ -107,4 +88,5 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		}
 
 	}
+
 }

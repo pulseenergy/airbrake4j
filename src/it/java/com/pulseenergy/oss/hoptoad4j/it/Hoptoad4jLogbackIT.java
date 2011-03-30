@@ -1,10 +1,11 @@
 package com.pulseenergy.oss.hoptoad4j.it;
 
-import org.apache.log4j.Logger;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class Hoptoad4jIT {
-	private static final Logger LOGGER = Logger.getLogger(Hoptoad4jIT.class);
+public class Hoptoad4jLogbackIT {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Hoptoad4jLogbackIT.class);
 
 	@Test
 	public void sendWarningMessage() {

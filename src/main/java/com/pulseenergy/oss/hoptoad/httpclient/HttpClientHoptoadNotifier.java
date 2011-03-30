@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
@@ -42,7 +41,7 @@ public class HttpClientHoptoadNotifier implements HoptoadNotifier {
 		}
 	}
 
-	private String responseBodyToString(final PostMethod method) throws UnsupportedEncodingException, IOException {
+	private String responseBodyToString(final PostMethod method) throws IOException {
 		final InputStream stream = method.getResponseBodyAsStream();
 		if (stream == null) {
 			return "";

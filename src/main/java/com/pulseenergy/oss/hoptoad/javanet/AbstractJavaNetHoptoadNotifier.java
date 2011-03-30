@@ -66,7 +66,7 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-			String line = null;
+			String line;
 			final StringBuilder buffer = new StringBuilder();
 			while ((line = reader.readLine()) != null) {
 				buffer.append(line);
@@ -89,7 +89,7 @@ public abstract class AbstractJavaNetHoptoadNotifier implements HoptoadNotifier 
 
 	protected abstract HttpURLConnection getHoptoadConnection(String hoptoadUri) throws IOException;
 
-	protected final static URL urlForString(final String hoptoadUri) {
+	protected static URL urlForString(final String hoptoadUri) {
 		URL url;
 		try {
 			url = new URL(hoptoadUri);

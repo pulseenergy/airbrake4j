@@ -1,0 +1,26 @@
+<configuration debug="true">
+
+    <appender name="hoptoad4j" class="com.pulseenergy.oss.hoptoad.logback.HoptoadLogbackAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <apiKey>${hoptoad4j.apiKey}</apiKey>
+        <nodeName>${user.name}</nodeName>
+        <componentName>${project.groupId}:${project.artifactId}:${project.version}</componentName>
+        <timeoutInMillis>2000</timeoutInMillis>
+        <useSSL>false</useSSL>
+        <environment>INTEGRATION_TEST</environment>
+    </appender>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are  by default assigned the type
+                 ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="hoptoad4j"/>
+    </root>
+</configuration>

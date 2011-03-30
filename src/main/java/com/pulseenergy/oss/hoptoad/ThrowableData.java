@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ThrowableData {
-	private String className;
-	private String message;
-	private List<StackTraceElement> stackTrace = new ArrayList<StackTraceElement>();
+	private final String className;
+	private final String message;
+	private final List<StackTraceElement> stackTrace = new ArrayList<StackTraceElement>();
 	private ThrowableData cause;
 
 	public ThrowableData(final String className, final String message) {
