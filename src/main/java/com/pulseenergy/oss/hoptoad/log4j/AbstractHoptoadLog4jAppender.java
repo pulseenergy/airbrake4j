@@ -6,6 +6,7 @@ import org.apache.log4j.spi.ThrowableInformation;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
 import com.pulseenergy.oss.hoptoad.HoptoadNotifier;
+import com.pulseenergy.oss.hoptoad.ThrowableData;
 
 public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 	private HoptoadNotifier hoptoadNotifier = null;
@@ -44,13 +45,17 @@ public abstract class AbstractHoptoadLog4jAppender extends AppenderSkeleton {
 		notification.setEnvironmentName(environment);
 		final ThrowableInformation throwableInformation = event.getThrowableInformation();
 		if (throwableInformation != null) {
-			notification.setThrowable(throwableInformation.getThrowable());
+			notification.setThrowableData(extractThrowableData(throwableInformation.getThrowable()));
 		}
 		notification.setErrorMessage(event.getMessage().toString());
 		notification.setErrorClass(event.getLoggerName());
 		notification.setNodeName(nodeName);
 		notification.setComponentName(componentName);
 		return notification;
+	}
+
+	private ThrowableData extractThrowableData(final Throwable throwable) {
+		return ThrowableData.fromThrowable(throwable);
 	}
 
 	public void setApiKey(final String apiKey) {

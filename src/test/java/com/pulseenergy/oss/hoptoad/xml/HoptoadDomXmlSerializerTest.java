@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.ThrowableData;
 
 public class HoptoadDomXmlSerializerTest {
 	private static final String HOPTOAD_NOTICE_SCHEMA = "/hoptoad-notice_2_0.xsd";
@@ -30,7 +31,7 @@ public class HoptoadDomXmlSerializerTest {
 	@Test
 	public void serialize() throws Exception {
 		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.setThrowable(new RuntimeException(EXPECTED_MESSAGE));
+		notification.setThrowableData(ThrowableData.fromThrowable(new RuntimeException(EXPECTED_MESSAGE)));
 		notification.setApiKey(EXPECTED_API_KEY);
 		final String xml = serializer.serialize(notification);
 		assertThat(StringUtils.isEmpty(xml), is(false));
@@ -49,7 +50,7 @@ public class HoptoadDomXmlSerializerTest {
 	@Test
 	public void serializeNested() throws Exception {
 		final Hoptoad4jNotice notification = new Hoptoad4jNotice();
-		notification.setThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException("This is the nested exception")));
+		notification.setThrowableData(ThrowableData.fromThrowable(new RuntimeException(EXPECTED_MESSAGE, new IllegalArgumentException("This is the nested exception"))));
 		notification.setApiKey(EXPECTED_API_KEY);
 		final String xml = serializer.serialize(notification);
 		assertThat(StringUtils.isEmpty(xml), is(false));

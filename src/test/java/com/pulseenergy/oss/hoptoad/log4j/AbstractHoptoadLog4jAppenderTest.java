@@ -61,7 +61,7 @@ public class AbstractHoptoadLog4jAppenderTest {
 		assertThat(notification.getApiKey(), is(EXPECTED_API_KEY));
 		assertThat(notification.getVersion(), is(EXPECTED_VERSION));
 		assertThat(notification.getEnvironmentName(), is(EXPECTED_ENVIRONMENT));
-		assertThat(notification.getThrowable(), is(SIMPLE_EXCEPTION));
+		assertThat(notification.getThrowableData().getClassName(), is(SIMPLE_EXCEPTION.getClass().getName()));
 		assertThat(notification.getErrorMessage(), is(EXPECTED_MESSAGE));
 		assertThat(notification.getNodeName(), is(EXPECTED_NODE_NAME));
 		assertThat(notification.getComponentName(), is(EXPECTED_COMPONENT_NAME));

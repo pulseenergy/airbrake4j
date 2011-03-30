@@ -15,6 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.pulseenergy.oss.hoptoad.Hoptoad4jNotice;
+import com.pulseenergy.oss.hoptoad.ThrowableData;
 
 public class HoptoadDomXmlSerializer {
 	private static final String CAUSED_BY = "Caused by ";
@@ -80,28 +81,28 @@ public class HoptoadDomXmlSerializer {
 		error.appendChild(buildTextElement(document, "message", notification.getErrorMessage()));
 		error.appendChild(buildTextElement(document, "class", notification.getErrorClass()));
 		final Element backtrace = document.createElement("backtrace");
-		final Throwable throwable = notification.getThrowable();
+		final ThrowableData throwableData = notification.getThrowableData();
 		final Element line = buildLine(document, "", notification.getErrorClass(), 0, "");
 		backtrace.appendChild(line);
-		if (throwable != null) {
-			appendBacktraceLines(document, backtrace, throwable, 0);
+		if (throwableData != null) {
+			appendBacktraceLines(document, backtrace, throwableData, 0);
 		}
 		error.appendChild(backtrace);
 		noticeElement.appendChild(error);
 	}
 
-	private void appendBacktraceLines(final Document document, final Element backtrace, final Throwable throwable, final int level) {
+	private void appendBacktraceLines(final Document document, final Element backtrace, final ThrowableData throwableData, final int level) {
 		final Element titleLine = document.createElement("line");
 		final String prefix = level > 0 ? CAUSED_BY : "";
-		titleLine.setAttribute("file", String.format("%s%s: %s", prefix, throwable.getClass().getName(), throwable.getMessage()));
+		titleLine.setAttribute("file", String.format("%s%s: %s", prefix, throwableData.getClass().getName(), throwableData.getMessage()));
 		titleLine.setAttribute("number", "");
 		backtrace.appendChild(titleLine);
-		for (final StackTraceElement element : throwable.getStackTrace()) {
+		for (final StackTraceElement element : throwableData.getStackTrace()) {
 			final Element line = buildLine(document, INDENT, element.getFileName(), element.getLineNumber(), element.getMethodName());
 			backtrace.appendChild(line);
 		}
-		if (throwable.getCause() != null) {
-			appendBacktraceLines(document, backtrace, throwable.getCause(), level + 1);
+		if (throwableData.getCause() != null) {
+			appendBacktraceLines(document, backtrace, throwableData.getCause(), level + 1);
 		}
 	}
 
