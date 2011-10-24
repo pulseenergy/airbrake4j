@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pulseenergy.oss</groupId>
-    <artifactId>hoptoad4j</artifactId>
+    <artifactId>airbrake4j</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>Hoptoad4j</name>
-    <url>https://github.com/pulseenergy/hoptoad4j</url>
+    <name>Airbrake4j</name>
+    <url>https://github.com/pulseenergy/airbrake4j</url>
     <prerequisites>
         <maven>3.0</maven>
     </prerequisites>
@@ -21,8 +21,8 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:ssh://git@github.com/pulseenergy/hoptoad4j.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/pulseenergy/hoptoad4j.git</developerConnection>
+        <connection>scm:git:ssh://git@github.com/pulseenergy/airbrake4j.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/pulseenergy/airbrake4j.git</developerConnection>
     </scm>
     <build>
         <plugins>

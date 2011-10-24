@@ -1,6 +1,6 @@
 <configuration debug="true">
 
-    <appender name="hoptoad4j" class="com.pulseenergy.oss.hoptoad.logback.HoptoadLogbackAppender">
+    <appender name="hoptoad4j" class="com.pulseenergy.oss.airbrake.logback.AirbrakeLogbackAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>WARN</level>
         </filter>
