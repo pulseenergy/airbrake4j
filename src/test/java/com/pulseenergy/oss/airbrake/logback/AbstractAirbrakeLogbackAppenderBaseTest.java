@@ -29,12 +29,12 @@ public class AbstractAirbrakeLogbackAppenderBaseTest {
 	private static final Throwable THROWABLE = new RuntimeException("SIMULATED");
 	private static final String MESSAGE = "MESSAGE";
 	private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AbstractAirbrakeLogbackAppenderBaseTest.class);
-	private StubAirbrakeLogbackAppender hoptoadAppender;
+	private StubAirbrakeLogbackAppender airbrakeAppender;
 	private class StubAirbrakeLogbackAppender extends AbstractAirbrakeLogbackAppenderBase {
 
 
 		@Override
-		protected AirbrakeNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, final boolean useSSL) {
+		protected AirbrakeNotifier buildAirbrakeNotifier(final int timeoutInMillis, final String airbrakeUri, final boolean useSSL) {
 			return airbrakeNotifier;
 		}
 
@@ -53,8 +53,8 @@ public class AbstractAirbrakeLogbackAppenderBaseTest {
 	@Before
 	public void setUp() throws Exception {
 
-		hoptoadAppender = new StubAirbrakeLogbackAppender();
-		hoptoadAppender.start();
+		airbrakeAppender = new StubAirbrakeLogbackAppender();
+		airbrakeAppender.start();
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class AbstractAirbrakeLogbackAppenderBaseTest {
 		when(throwableProxy.getStackTraceElementProxyArray()).thenReturn(Collections.singletonList(stackTraceElementProxy).toArray(new StackTraceElementProxy[1]));
 		when(eventObject.getThrowableProxy()).thenReturn(throwableProxy);
 		when(eventObject.getMessage()).thenReturn(MESSAGE);
-		hoptoadAppender.append(eventObject);
+		airbrakeAppender.append(eventObject);
 		verify(airbrakeNotifier).send(notificationCaptor.capture());
 		Airbrake4jNotice notification = notificationCaptor.getValue();
 		assertThat(notification.getErrorMessage(), is(MESSAGE));

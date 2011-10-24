@@ -6,13 +6,13 @@ import java.net.URL;
 
 public class JavaNetAirbrakeNotifier extends AbstractJavaNetAirbrakeNotifier {
 
-	public JavaNetAirbrakeNotifier(final String hoptoadUri, final int timeoutInMillis, final boolean useSSL) {
-		super(hoptoadUri, timeoutInMillis, useSSL);
+	public JavaNetAirbrakeNotifier(final String airbrakeUri, final int timeoutInMillis, final boolean useSSL) {
+		super(airbrakeUri, timeoutInMillis, useSSL);
 	}
 
 	@Override
-	protected HttpURLConnection getHoptoadConnection(final String hoptoadUri) throws IOException {
-		final URL hoptoadUrl = urlForString(hoptoadUri);
-		return (HttpURLConnection) hoptoadUrl.openConnection();
+	protected HttpURLConnection getAirbrakeConnection(final String airbrakeUri) throws IOException {
+		final URL airbrakeUrl = urlForString(airbrakeUri);
+		return (HttpURLConnection) airbrakeUrl.openConnection();
 	}
 }

@@ -23,12 +23,12 @@ import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractJavaNetAirbrakeNotifierTest {
 	private class StubJavaNetAirbrakeNotifier extends AbstractJavaNetAirbrakeNotifier {
-		public StubJavaNetAirbrakeNotifier(final String hoptoadUri, final int timeoutInMillis) {
-			super(hoptoadUri, timeoutInMillis, true);
+		public StubJavaNetAirbrakeNotifier(final String airbrakeUri, final int timeoutInMillis) {
+			super(airbrakeUri, timeoutInMillis, true);
 		}
 
 		@Override
-		protected HttpURLConnection getHoptoadConnection(final String uri) {
+		protected HttpURLConnection getAirbrakeConnection(final String uri) {
 			return httpConnection;
 		}
 
@@ -58,7 +58,7 @@ public class AbstractJavaNetAirbrakeNotifierTest {
 	}
 
 	@Test(expected = IOException.class)
-	public void sendResultingInFailureFromHoptoad() throws Exception {
+	public void sendResultingInFailureFromAirbrake() throws Exception {
 		final AirbrakeNotifier notifier = new StubJavaNetAirbrakeNotifier(null, 1999);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(413);

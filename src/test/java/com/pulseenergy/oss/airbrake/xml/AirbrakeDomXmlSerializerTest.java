@@ -23,7 +23,7 @@ import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
 import com.pulseenergy.oss.airbrake.ThrowableData;
 
 public class AirbrakeDomXmlSerializerTest {
-	private static final String HOPTOAD_NOTICE_SCHEMA = "/hoptoad-notice_2_0.xsd";
+	private static final String AIRBRAKE_NOTICE_SCHEMA = "/airbrake-notice_2_0.xsd";
 	private static final String EXPECTED_MESSAGE = "This is the message";
 	private static final String EXPECTED_API_KEY = "lkjhfslkjhfljhfljkh";
 	private final AirbrakeDomXmlSerializer serializer = new AirbrakeDomXmlSerializer();
@@ -60,7 +60,7 @@ public class AirbrakeDomXmlSerializerTest {
 
 	private void validateXml(final String xml) throws SAXException, IOException {
 		final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		final URL resourceURL = getClass().getResource(HOPTOAD_NOTICE_SCHEMA);
+		final URL resourceURL = getClass().getResource(AIRBRAKE_NOTICE_SCHEMA);
 		assertThat(resourceURL, notNullValue());
 		final Schema schema = schemaFactory.newSchema(resourceURL);
 		final Validator validator = schema.newValidator();

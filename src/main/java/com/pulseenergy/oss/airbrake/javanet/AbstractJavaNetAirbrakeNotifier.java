@@ -17,23 +17,23 @@ import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
 
 public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifier {
-	private static final String ERR_UNEXPECTED_RESPONSE = "Hoptoad responded with an unexpected response code %d:\n%s\n\nSupplied XML:\n%s";
+	private static final String ERR_UNEXPECTED_RESPONSE = "Airbrake responded with an unexpected response code %d:\n%s\n\nSupplied XML:\n%s";
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetAirbrakeNotifier.class.getName());
 	private static final int DEFAULT_TIMEOUT = 5000;
-	private static final String DEFAULT_HOPTOAD_URI = "http://hoptoadapp.com/notifier_api/v2/notices";
+	private static final String DEFAULT_AIRBRAKE_URI = "http://airbrakeapp.com/notifier_api/v2/notices";
 	private static final int HTTP_OK = 200;
 	private final int timeoutInMillis;
 	private final AirbrakeDomXmlSerializer serializer = new AirbrakeDomXmlSerializer();
-	private final String hoptoadUri;
+	private final String airbrakeUri;
 
-	public AbstractJavaNetAirbrakeNotifier(final String hoptoadUri, final int timeoutInMillis, final boolean useSSL) {
-		this.hoptoadUri = buildHoptoadUri(hoptoadUri, useSSL);
+	public AbstractJavaNetAirbrakeNotifier(final String airbrakeUri, final int timeoutInMillis, final boolean useSSL) {
+		this.airbrakeUri = buildAirbrakeUri(airbrakeUri, useSSL);
 		this.timeoutInMillis = (timeoutInMillis < 1) ? DEFAULT_TIMEOUT : timeoutInMillis;
 	}
 
-	private String buildHoptoadUri(final String hoptoadUri, final boolean useSSL) {
-		final String uri = isEmpty(hoptoadUri) ? DEFAULT_HOPTOAD_URI : hoptoadUri;
+	private String buildAirbrakeUri(final String airbrakeUri, final boolean useSSL) {
+		final String uri = isEmpty(airbrakeUri) ? DEFAULT_AIRBRAKE_URI : airbrakeUri;
 		if (useSSL && uri.startsWith("http://")) {
 			return uri.replaceFirst("http://", "https://");
 		}
@@ -42,7 +42,7 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 
 	public void send(final Airbrake4jNotice notification) throws IOException {
 		final String xml = serializer.serialize(notification);
-		final HttpURLConnection connection = getHoptoadConnection(hoptoadUri);
+		final HttpURLConnection connection = getAirbrakeConnection(airbrakeUri);
 		connection.setConnectTimeout(timeoutInMillis);
 		connection.setReadTimeout(timeoutInMillis);
 		connection.setDoOutput(true);
@@ -50,11 +50,11 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 		connection.setRequestProperty("Content-Type", "text/xml; charset=UTF-8");
 		connection.connect();
 		try {
-			writeXmlToHoptoad(xml, connection);
+			writeXmlToAirbrake(xml, connection);
 			final int responseCode = connection.getResponseCode();
 
 			if (responseCode != HTTP_OK) {
-				final String response = readHoptoadErrorResponse(connection);
+				final String response = readAirbrakeErrorResponse(connection);
 				throw new IOException(String.format(ERR_UNEXPECTED_RESPONSE, responseCode, response, xml));
 			}
 		} finally {
@@ -62,7 +62,7 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 		}
 	}
 
-	private String readHoptoadErrorResponse(final HttpURLConnection connection) throws IOException {
+	private String readAirbrakeErrorResponse(final HttpURLConnection connection) throws IOException {
 		BufferedReader reader = null;
 		try {
 			reader = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
@@ -77,7 +77,7 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 		}
 	}
 
-	private void writeXmlToHoptoad(final String xml, final HttpURLConnection connection) throws IOException {
+	private void writeXmlToAirbrake(final String xml, final HttpURLConnection connection) throws IOException {
 		OutputStream out = null;
 		try {
 			out = connection.getOutputStream();
@@ -87,14 +87,14 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 		}
 	}
 
-	protected abstract HttpURLConnection getHoptoadConnection(String hoptoadUri) throws IOException;
+	protected abstract HttpURLConnection getAirbrakeConnection(String airbrakeUri) throws IOException;
 
-	protected static URL urlForString(final String hoptoadUri) {
+	protected static URL urlForString(final String airbrakeUri) {
 		URL url;
 		try {
-			url = new URL(hoptoadUri);
+			url = new URL(airbrakeUri);
 		} catch (final MalformedURLException e) {
-			throw new IllegalArgumentException("The provided URI is malformed: " + hoptoadUri, e);
+			throw new IllegalArgumentException("The provided URI is malformed: " + airbrakeUri, e);
 		}
 		return url;
 	}

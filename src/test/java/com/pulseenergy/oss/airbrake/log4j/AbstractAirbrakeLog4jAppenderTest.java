@@ -27,8 +27,8 @@ public class AbstractAirbrakeLog4jAppenderTest {
 
 	private final class StubAirbrakeLog4jAppender extends AbstractAirbrakeLog4jAppender {
 		@Override
-		protected AirbrakeNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, final boolean useSSL) {
-			return hoptoadNotifier;
+		protected AirbrakeNotifier buildAirbrakeNotifier(final int timeoutInMillis, final String airbrakeUri, final boolean useSSL) {
+			return airbrakeNotifier;
 		}
 	}
 
@@ -41,7 +41,7 @@ public class AbstractAirbrakeLog4jAppenderTest {
 	private final AbstractAirbrakeLog4jAppender appender = new StubAirbrakeLog4jAppender();
 
 	@Mock
-	private HttpClientAirbrakeNotifier hoptoadNotifier;
+	private HttpClientAirbrakeNotifier airbrakeNotifier;
 	@Captor
 	private ArgumentCaptor<Airbrake4jNotice> notificationCaptor;
 
@@ -50,13 +50,13 @@ public class AbstractAirbrakeLog4jAppenderTest {
 		appender.setApiKey(EXPECTED_API_KEY);
 		appender.setEnvironment(EXPECTED_ENVIRONMENT);
 		appender.setTimeoutInMillis(EXPECTED_TIMEOUT);
-		appender.setHoptoadUri(EXPECTED_URI);
+		appender.setAirbrakeUri(EXPECTED_URI);
 		appender.setNodeName(EXPECTED_NODE_NAME);
 		appender.setComponentName(EXPECTED_COMPONENT_NAME);
 		appender.activateOptions();
 		final LoggingEvent event = new LoggingEvent(getClass().getName(), LOGGER, Level.WARN, EXPECTED_MESSAGE, SIMPLE_EXCEPTION);
 		appender.doAppend(event);
-		verify(hoptoadNotifier).send(notificationCaptor.capture());
+		verify(airbrakeNotifier).send(notificationCaptor.capture());
 		final Airbrake4jNotice notification = notificationCaptor.getValue();
 		assertThat(notification.getApiKey(), is(EXPECTED_API_KEY));
 		assertThat(notification.getVersion(), is(EXPECTED_VERSION));

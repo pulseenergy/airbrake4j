@@ -9,20 +9,20 @@ public class Airbrake4jNotice {
 	private static final String notifierUrl;
 
 	static {
-		final Properties hoptoadProperties = new Properties();
+		final Properties airbrakeProperties = new Properties();
 		try {
-			hoptoadProperties.load(Airbrake4jNotice.class.getResourceAsStream("/META-INF/MANIFEST.MF"));
+			airbrakeProperties.load(Airbrake4jNotice.class.getResourceAsStream("/META-INF/MANIFEST.MF"));
 		} catch (final IOException e) {
 			throw new IllegalStateException("Unable to load manifest file", e);
 		}
-		notifierName = String.valueOf(hoptoadProperties.get("airbrake4j-name"));
-		notifierVersion = String.valueOf(hoptoadProperties.get("airbrake4j-version"));
-		notifierUrl = String.valueOf(hoptoadProperties.get("airbrake4j-url"));
+		notifierName = String.valueOf(airbrakeProperties.get("airbrake4j-name"));
+		notifierVersion = String.valueOf(airbrakeProperties.get("airbrake4j-version"));
+		notifierUrl = String.valueOf(airbrakeProperties.get("airbrake4j-url"));
 	}
 	private final String version = "2.0"; // Required. The version of the API being used. Should be set to "2.0"
 
 	private String apiKey; // Required. The API key for the project that this error belongs to. The API key can be found by viewing the edit project form on the
-	                       // Hoptoad site.
+	                       // Airbrake site.
 
 	private String errorClass; // Required. The class name or type of error that occurred.
 

@@ -6,7 +6,7 @@ import com.pulseenergy.oss.airbrake.javanet.JavaNetAirbrakeNotifier;
 public class AirbrakeLog4jAppender extends AbstractAirbrakeLog4jAppender {
 
 	@Override
-	protected AirbrakeNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, final boolean useSSL) {
-		return new JavaNetAirbrakeNotifier(hoptoadUri, timeoutInMillis, useSSL);
+	protected AirbrakeNotifier buildAirbrakeNotifier(final int timeoutInMillis, final String airbrakeUri, final boolean useSSL) {
+		return new JavaNetAirbrakeNotifier(airbrakeUri, timeoutInMillis, useSSL);
 	}
 }

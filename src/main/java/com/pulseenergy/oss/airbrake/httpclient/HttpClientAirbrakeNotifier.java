@@ -18,26 +18,26 @@ import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
 public class HttpClientAirbrakeNotifier implements AirbrakeNotifier {
 	private static final String CHARSET_NAME = "UTF-8";
 	private static final String CONTENT_TYPE = "text/xml";
-	private static final String DEFAULT_HOPTOAD_URI = "http://hoptoadapp.com/notifier_api/v2/notices";
+	private static final String DEFAULT_AIRBRAKE_URI = "http://airbrakeapp.com/notifier_api/v2/notices";
 	private final HttpClient httpClient;
-	private final String hoptoadUri;
+	private final String airbrakeUri;
 	private final AirbrakeDomXmlSerializer serializer = new AirbrakeDomXmlSerializer();
 
 	public HttpClientAirbrakeNotifier(final HttpClient httpClient) {
 		this(httpClient, null);
 	}
 
-	public HttpClientAirbrakeNotifier(final HttpClient httpClient, final String hoptoadUri) {
+	public HttpClientAirbrakeNotifier(final HttpClient httpClient, final String airbrakeUri) {
 		this.httpClient = httpClient;
-		this.hoptoadUri = StringUtils.isEmpty(hoptoadUri) ? DEFAULT_HOPTOAD_URI : hoptoadUri;
+		this.airbrakeUri = StringUtils.isEmpty(airbrakeUri) ? DEFAULT_AIRBRAKE_URI : airbrakeUri;
 	}
 
 	public void send(final Airbrake4jNotice notification) throws IOException {
-		final PostMethod method = new PostMethod(hoptoadUri);
+		final PostMethod method = new PostMethod(airbrakeUri);
 		method.setRequestEntity(new StringRequestEntity(serializer.serialize(notification), CONTENT_TYPE, CHARSET_NAME));
 		final int httpStatus = httpClient.executeMethod(method);
 		if (httpStatus != HttpStatus.SC_OK) {
-			System.err.printf("ERROR: Received unexpected response code %d from Hoptoad: %s\n", httpStatus, responseBodyToString(method));
+			System.err.printf("ERROR: Received unexpected response code %d from Airbrake: %s\n", httpStatus, responseBodyToString(method));
 		}
 	}
 

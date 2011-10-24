@@ -11,7 +11,7 @@ public abstract class AbstractAirbrakeLog4jAppender extends AppenderSkeleton {
 	private String apiKey;
 	private String environment;
 	private int timeoutInMillis;
-	private String hoptoadUri;
+	private String airbrakeUri;
 	private boolean useSSL = false;
 	private final GuardedAppender guardedAppender = new GuardedAppender();
 	private String nodeName;
@@ -20,11 +20,11 @@ public abstract class AbstractAirbrakeLog4jAppender extends AppenderSkeleton {
 
 	@Override
 	public void activateOptions() {
-		this.airbrakeNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri, useSSL);
+		this.airbrakeNotifier = buildAirbrakeNotifier(timeoutInMillis, airbrakeUri, useSSL);
 		this.notificationBuilder = new Log4jAirbrakeNotificationBuilder(apiKey, environment, nodeName, componentName);
 	}
 
-	protected abstract AirbrakeNotifier buildHoptoadNotifier(int timeoutInMillis, String hoptoadUri, boolean useSSL);
+	protected abstract AirbrakeNotifier buildAirbrakeNotifier(int timeoutInMillis, String airbrakeUri, boolean useSSL);
 
 	@Override
 	protected void append(final LoggingEvent event) {
@@ -51,8 +51,8 @@ public abstract class AbstractAirbrakeLog4jAppender extends AppenderSkeleton {
 		this.timeoutInMillis = timeoutInMillis;
 	}
 
-	public void setHoptoadUri(final String hoptoadUri) {
-		this.hoptoadUri = hoptoadUri;
+	public void setAirbrakeUri(final String airbrakeUri) {
+		this.airbrakeUri = airbrakeUri;
 	}
 
 	public void setUseSSL(final boolean useSSL) {
@@ -80,7 +80,7 @@ public abstract class AbstractAirbrakeLog4jAppender extends AppenderSkeleton {
 				try {
 					airbrakeNotifier.send(notification);
 				} catch (final Exception e) {
-					getErrorHandler().error("Unable to send notification to Hoptoad", e, -1);
+					getErrorHandler().error("Unable to send notification to Airbrake", e, -1);
 				}
 			} finally {
 				guard = false;

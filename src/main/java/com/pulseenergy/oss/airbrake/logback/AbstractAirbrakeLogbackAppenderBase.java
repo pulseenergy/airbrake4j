@@ -11,7 +11,7 @@ public abstract class AbstractAirbrakeLogbackAppenderBase extends AppenderBase<I
 	private String apiKey;
 	private String environment;
 	private int timeoutInMillis;
-	private String hoptoadUri;
+	private String airbrakeUri;
 	private boolean useSSL = false;
 	private String nodeName;
 	private String componentName;
@@ -29,8 +29,8 @@ public abstract class AbstractAirbrakeLogbackAppenderBase extends AppenderBase<I
 		this.timeoutInMillis = timeoutInMillis;
 	}
 
-	public void setHoptoadUri(final String hoptoadUri) {
-		this.hoptoadUri = hoptoadUri;
+	public void setAirbrakeUri(final String airbrakeUri) {
+		this.airbrakeUri = airbrakeUri;
 	}
 
 	public void setUseSSL(final boolean useSSL) {
@@ -48,11 +48,11 @@ public abstract class AbstractAirbrakeLogbackAppenderBase extends AppenderBase<I
 	@Override
 	public void start() {
 		super.start();
-		airbrakeNotifier = buildHoptoadNotifier(timeoutInMillis, hoptoadUri, useSSL);
+		airbrakeNotifier = buildAirbrakeNotifier(timeoutInMillis, airbrakeUri, useSSL);
 		notificationBuilder = new LogbackAirbrakeNotificationBuilder(apiKey, environment, nodeName, componentName);
 	}
 
-	protected abstract AirbrakeNotifier buildHoptoadNotifier(final int timeoutInMillis, final String hoptoadUri, final boolean useSSL);
+	protected abstract AirbrakeNotifier buildAirbrakeNotifier(final int timeoutInMillis, final String airbrakeUri, final boolean useSSL);
 
 	@Override
     protected void append(ILoggingEvent eventObject) {
@@ -60,7 +60,7 @@ public abstract class AbstractAirbrakeLogbackAppenderBase extends AppenderBase<I
 		try {
 			airbrakeNotifier.send(notification);
 		} catch (final Exception e) {
-			addError("Unable to send notification to Hoptoad", e);
+			addError("Unable to send notification to Airbrake", e);
 		}
 
     }

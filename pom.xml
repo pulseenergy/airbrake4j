@@ -45,9 +45,9 @@
                         <manifest>
                         </manifest>
                         <manifestEntries>
-                            <hoptoad4j-name>${project.artifactId}</hoptoad4j-name>
-                            <hoptoad4j-version>${project.version}</hoptoad4j-version>
-                            <hoptoad4j-url>${project.url}</hoptoad4j-url>
+                            <airbrake4j-name>${project.artifactId}</airbrake4j-name>
+                            <airbrake4j-version>${project.version}</airbrake4j-version>
+                            <airbrake4j-url>${project.url}</airbrake4j-url>
                         </manifestEntries>
                     </archive>
                 </configuration>
