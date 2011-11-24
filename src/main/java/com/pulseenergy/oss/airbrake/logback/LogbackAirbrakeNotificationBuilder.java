@@ -17,7 +17,28 @@ class LogbackAirbrakeNotificationBuilder extends AbstractAirbrakeNotificationBui
 	}
 
 	protected String getErrorClassName(final ILoggingEvent event) {
-		return event.getLoggerName();
+		final StackTraceElement[] ste = event.getCallerData();
+		if (ste == null || ste.length == 0) {
+			return event.getLoggerName();
+		}
+		return ste[0].getClassName();
+	}
+
+	protected String getErrorClassMethodName(final ILoggingEvent event) {
+		final StackTraceElement[] ste = event.getCallerData();
+		if (ste == null || ste.length == 0) {
+			return "";
+		}
+		return ste[0].getMethodName();
+	}
+
+	@Override
+	protected String getErrorClassLineText(final ILoggingEvent event) {
+		final StackTraceElement[] ste = event.getCallerData();
+		if (ste == null || ste.length == 0) {
+			return "0";
+		}
+		return String.valueOf(ste[0].getLineNumber());
 	}
 
 	protected String getMessage(final ILoggingEvent event) {

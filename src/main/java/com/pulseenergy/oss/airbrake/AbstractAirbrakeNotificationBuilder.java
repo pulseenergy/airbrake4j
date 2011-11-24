@@ -23,6 +23,8 @@ public abstract class AbstractAirbrakeNotificationBuilder<T, U> {
 		}
 		notification.setErrorMessage(getMessage(event));
 		notification.setErrorClass(getErrorClassName(event));
+		notification.setErrorClassLineText(getErrorClassLineText(event));
+		notification.setErrorClassMethodName(getErrorClassMethodName(event));
 		notification.setNodeName(nodeName);
 		notification.setComponentName(componentName);
 		return notification;
@@ -31,11 +33,15 @@ public abstract class AbstractAirbrakeNotificationBuilder<T, U> {
 
 	protected abstract U getThrowableDataSource(final T event);
 
-	protected abstract  String getErrorClassName(final T event);
+	protected abstract String getErrorClassName(final T event);
 
-	protected abstract  String getMessage(final T event);
+	protected abstract String getErrorClassMethodName(final T event);
 
-	protected abstract  ThrowableData extractThrowableData(final U proxy);
+	protected abstract String getErrorClassLineText(final T event);
+
+	protected abstract String getMessage(final T event);
+
+	protected abstract ThrowableData extractThrowableData(final U proxy);
 
 
 }

@@ -82,7 +82,7 @@ public class AirbrakeDomXmlSerializer {
 		error.appendChild(buildTextElement(document, "class", notification.getErrorClass()));
 		final Element backtrace = document.createElement("backtrace");
 		final ThrowableData throwableData = notification.getThrowableData();
-		final Element line = buildLine(document, "", notification.getErrorClass(), 0, "");
+		final Element line = buildLine(document, "", notification.getErrorClass(), notification.getErrorClassLineText(), notification.getErrorClassMethodName());
 		backtrace.appendChild(line);
 		if (throwableData != null) {
 			appendBacktraceLines(document, backtrace, throwableData, 0);
@@ -107,9 +107,14 @@ public class AirbrakeDomXmlSerializer {
 	}
 
 	private Element buildLine(final Document document, final String indent, final String fileName, final int lineNumber, final String methodName) {
+		final String lineNumberText = String.valueOf(lineNumber);
+		return buildLine(document, indent, fileName, methodName, lineNumberText);
+	}
+
+	private Element buildLine(final Document document, final String indent, final String fileName, final String methodName, final String lineNumberText) {
 		final Element line = document.createElement("line");
 		line.setAttribute("file", indent + fileName);
-		line.setAttribute("number", String.valueOf(lineNumber));
+		line.setAttribute("number", lineNumberText);
 		line.setAttribute("method", methodName);
 		return line;
 	}

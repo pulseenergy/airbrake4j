@@ -35,6 +35,8 @@ public class Airbrake4jNotice {
 	private ThrowableData throwableData;
 	private String nodeName;
 	private String componentName;
+	private String errorClassMethodName;
+	private String errorClassLineText;
 
 	public String getApiKey() {
 		return apiKey;
@@ -116,5 +118,19 @@ public class Airbrake4jNotice {
 		return throwableData;
 	}
 
+	public String getErrorClassLineText() {
+		return errorClassLineText;
+	}
 
+	public void setErrorClassLineText(final String errorClassLineText) {
+		this.errorClassLineText = errorClassLineText;
+	}
+
+	public String getErrorClassMethodName() {
+		return errorClassMethodName;
+	}
+
+	public void setErrorClassMethodName(final String errorClassMethodName) {
+		this.errorClassMethodName = errorClassMethodName;
+	}
 }

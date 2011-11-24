@@ -18,7 +18,26 @@ class Log4jAirbrakeNotificationBuilder extends AbstractAirbrakeNotificationBuild
 
 	@Override
 	protected String getErrorClassName(final LoggingEvent event) {
-		return event.getLoggerName();
+		if (event.locationInformationExists()) {
+			return event.getLocationInformation().getClassName();
+		}
+		return event.getFQNOfLoggerClass();
+	}
+
+	@Override
+	protected String getErrorClassMethodName(final LoggingEvent event) {
+		if (event.locationInformationExists()) {
+			return event.getLocationInformation().getMethodName();
+		}
+		return "";
+	}
+
+	@Override
+	protected String getErrorClassLineText(final LoggingEvent event) {
+		if (event.locationInformationExists()) {
+			return event.getLocationInformation().getLineNumber();
+		}
+		return "?";
 	}
 
 	@Override
