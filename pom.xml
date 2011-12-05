@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.pulseenergy.oss</groupId>
     <artifactId>airbrake4j</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Airbrake4j</name>
     <url>https://github.com/pulseenergy/airbrake4j</url>
     <prerequisites>
