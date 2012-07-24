@@ -21,7 +21,7 @@ public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifie
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetAirbrakeNotifier.class.getName());
 	private static final int DEFAULT_TIMEOUT = 5000;
-	private static final String DEFAULT_AIRBRAKE_URI = "http://airbrakeapp.com/notifier_api/v2/notices";
+	private static final String DEFAULT_AIRBRAKE_URI = "http://api.airbrake.io/notifier_api/v2/notices";
 	private static final int HTTP_OK = 200;
 	private final int timeoutInMillis;
 	private final AirbrakeDomXmlSerializer serializer = new AirbrakeDomXmlSerializer();
