@@ -1,4 +1,4 @@
 Pulse Energy Airbrake4j
 ==========================
 
-(c) 2011 Pulse Energy, Inc.
+(c) 2012 Pulse Energy, Inc.
