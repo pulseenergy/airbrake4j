@@ -9,7 +9,7 @@ public class Airbrake4jLogbackIT {
 
 	@Test
 	public void sendWarningMessage() {
-		LOGGER.warn("This is a warning message from " + getClass().getName());
+		LOGGER.warn("This is a warning message from {}", getClass().getName());
 	}
 
 	@Test

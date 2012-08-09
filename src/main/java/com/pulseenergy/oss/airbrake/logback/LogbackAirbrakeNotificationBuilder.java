@@ -42,7 +42,7 @@ class LogbackAirbrakeNotificationBuilder extends AbstractAirbrakeNotificationBui
 	}
 
 	protected String getMessage(final ILoggingEvent event) {
-		return event.getMessage();
+		return event.getFormattedMessage();
 	}
 
 	protected ThrowableData extractThrowableData(final IThrowableProxy proxy) {
