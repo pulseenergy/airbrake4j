@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.airbrake;
+package com.pulseenergy.oss.logging;
 
 import java.util.ArrayList;
 import java.util.Arrays;

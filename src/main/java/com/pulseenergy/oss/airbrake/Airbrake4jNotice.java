@@ -3,6 +3,8 @@ package com.pulseenergy.oss.airbrake;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.pulseenergy.oss.logging.ThrowableData;
+
 public class Airbrake4jNotice {
 	private static final String notifierName;
 	private static final String notifierVersion;

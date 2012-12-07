@@ -5,7 +5,7 @@ import ch.qos.logback.classic.spi.IThrowableProxy;
 import ch.qos.logback.classic.spi.StackTraceElementProxy;
 
 import com.pulseenergy.oss.airbrake.AbstractAirbrakeNotificationBuilder;
-import com.pulseenergy.oss.airbrake.ThrowableData;
+import com.pulseenergy.oss.logging.ThrowableData;
 
 class LogbackAirbrakeNotificationBuilder extends AbstractAirbrakeNotificationBuilder<ILoggingEvent, IThrowableProxy> {
 	LogbackAirbrakeNotificationBuilder(final String apiKey, final String environment, final String nodeName, final String componentName) {

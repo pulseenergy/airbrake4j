@@ -20,7 +20,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.ThrowableData;
+import com.pulseenergy.oss.logging.ThrowableData;
 
 public class AirbrakeDomXmlSerializerTest {
 	private static final String AIRBRAKE_NOTICE_SCHEMA = "/airbrake-notice_2_0.xsd";

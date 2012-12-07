@@ -4,7 +4,7 @@ import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.ThrowableInformation;
 
 import com.pulseenergy.oss.airbrake.AbstractAirbrakeNotificationBuilder;
-import com.pulseenergy.oss.airbrake.ThrowableData;
+import com.pulseenergy.oss.logging.ThrowableData;
 
 class Log4jAirbrakeNotificationBuilder extends AbstractAirbrakeNotificationBuilder<LoggingEvent, ThrowableInformation> {
 	Log4jAirbrakeNotificationBuilder(final String apiKey, final String environment, final String nodeName, final String componentName) {

@@ -15,7 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.ThrowableData;
+import com.pulseenergy.oss.logging.ThrowableData;
 import com.pulseenergy.oss.logging.NotificationSerializer;
 
 public class AirbrakeDomXmlSerializer implements NotificationSerializer<String, Airbrake4jNotice> {

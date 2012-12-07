@@ -1,5 +1,6 @@
 package com.pulseenergy.oss.airbrake;
 
+import com.pulseenergy.oss.logging.ThrowableData;
 import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
 
 public abstract class AbstractAirbrakeNotificationBuilder<T, U> implements HttpNotificationBuilder<Airbrake4jNotice, T> {
