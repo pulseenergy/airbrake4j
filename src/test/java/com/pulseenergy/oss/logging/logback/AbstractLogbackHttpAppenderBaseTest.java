@@ -16,8 +16,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.pulseenergy.oss.http.HttpNotificationBuilder;
-import com.pulseenergy.oss.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
+import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractLogbackHttpAppenderBaseTest {

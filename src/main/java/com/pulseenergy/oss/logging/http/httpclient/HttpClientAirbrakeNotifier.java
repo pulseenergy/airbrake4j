@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.airbrake.httpclient;
+package com.pulseenergy.oss.logging.http.httpclient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
-import com.pulseenergy.oss.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 public class HttpClientAirbrakeNotifier implements HttpNotificationSender<Airbrake4jNotice> {
 	private static final String CHARSET_NAME = "UTF-8";

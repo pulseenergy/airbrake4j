@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.airbrake.httpclient;
+package com.pulseenergy.oss.logging.http.httpclient;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpClientAirbrakeNotifierTest {

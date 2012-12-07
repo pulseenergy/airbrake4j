@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.http;
+package com.pulseenergy.oss.logging.http;
 
 import java.io.IOException;
 

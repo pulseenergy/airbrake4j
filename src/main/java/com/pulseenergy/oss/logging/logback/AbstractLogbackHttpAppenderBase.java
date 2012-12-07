@@ -3,8 +3,8 @@ package com.pulseenergy.oss.logging.logback;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 
-import com.pulseenergy.oss.http.HttpNotificationBuilder;
-import com.pulseenergy.oss.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
+import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 public abstract class AbstractLogbackHttpAppenderBase<T> extends AppenderBase<ILoggingEvent> {
 	private HttpNotificationSender<T> notificationSender;

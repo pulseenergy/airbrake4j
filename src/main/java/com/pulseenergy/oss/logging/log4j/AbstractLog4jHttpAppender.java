@@ -3,8 +3,8 @@ package com.pulseenergy.oss.logging.log4j;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;
 
-import com.pulseenergy.oss.http.HttpNotificationBuilder;
-import com.pulseenergy.oss.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
+import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 public abstract class AbstractLog4jHttpAppender<T> extends AppenderSkeleton {
 	private final GuardedAppender guardedAppender = new GuardedAppender();
