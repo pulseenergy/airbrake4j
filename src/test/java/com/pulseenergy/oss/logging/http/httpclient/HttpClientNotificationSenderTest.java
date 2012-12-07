@@ -2,6 +2,7 @@ package com.pulseenergy.oss.logging.http.httpclient;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.when;
 
@@ -17,11 +18,13 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
-import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
+import com.pulseenergy.oss.logging.NotificationSerializer;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
-public class HttpClientAirbrakeNotifierTest {
+public class HttpClientNotificationSenderTest {
+	private static final String SERIALIZE_MESSAGE = "SERIALIZED";
+
 	private final class ExecutePostMethodAnswer implements Answer<Integer> {
 		private final int httpStatus;
 
@@ -41,25 +44,27 @@ public class HttpClientAirbrakeNotifierTest {
 	private static final String EXPECTED_URL = "http://unit.test/";
 	@Mock
 	private HttpClient httpClient;
-	private HttpNotificationSender<Airbrake4jNotice> airbrakeNotifier;
+	@Mock
+	private NotificationSerializer<String, String> serializer;
+	private HttpNotificationSender<String> notificationSender;
 
 	@Before
 	public void setUp() {
-		airbrakeNotifier = new HttpClientAirbrakeNotifier(httpClient, EXPECTED_URL);
+		notificationSender = new HttpClientNotificationSender<String>(EXPECTED_URL, httpClient, serializer, EXPECTED_CONTENT_TYPE);
 	}
 
 	@Test
 	public void sendErrorNotification() throws Exception {
-		final Airbrake4jNotice notification = new Airbrake4jNotice();
+		when(serializer.serialize(anyString())).thenReturn(SERIALIZE_MESSAGE);
 		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_OK));
-		airbrakeNotifier.send(notification);
+		notificationSender.send("notification");
 	}
 
 	@Test
 	public void sendInvalidErrorNotification() throws Exception {
-		final Airbrake4jNotice notification = new Airbrake4jNotice();
+		when(serializer.serialize(anyString())).thenReturn(SERIALIZE_MESSAGE);
 		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_UNPROCESSABLE_ENTITY));
-		airbrakeNotifier.send(notification);
+		notificationSender.send("notification");
 	}
 
 	private static void assertProperlyConfiguredMethod(final PostMethod method) {

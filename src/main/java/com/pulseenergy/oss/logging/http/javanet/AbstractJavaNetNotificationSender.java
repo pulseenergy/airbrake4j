@@ -17,10 +17,10 @@ import org.apache.commons.lang.StringUtils;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 import com.pulseenergy.oss.logging.NotificationSerializer;
 
-public abstract class AbstractJavaNetAirbrakeNotifier<T> implements HttpNotificationSender<T> {
+public abstract class AbstractJavaNetNotificationSender<T> implements HttpNotificationSender<T> {
 	private static final String ERR_UNEXPECTED_RESPONSE = "Service responded with an unexpected response code %d:\n%s\n\nSupplied POST data:\n%s";
 	private static final Charset CHARSET = Charset.forName("UTF-8");
-	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetAirbrakeNotifier.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetNotificationSender.class.getName());
 	private static final int DEFAULT_TIMEOUT = 5000;
 	private static final int HTTP_OK = 200;
 	private static final String HTTP = "http://";
@@ -30,7 +30,7 @@ public abstract class AbstractJavaNetAirbrakeNotifier<T> implements HttpNotifica
 	private final String uri;
 	private String contentType;
 
-	public AbstractJavaNetAirbrakeNotifier(final String uri, final int timeoutInMillis, final boolean useSSL, final NotificationSerializer<String, T> serializer, final String contentType) {
+	public AbstractJavaNetNotificationSender(final String uri, final int timeoutInMillis, final boolean useSSL, final NotificationSerializer<String, T> serializer, final String contentType) {
 		this.uri = buildNotificationUri(uri, useSSL);
 		this.timeoutInMillis = (timeoutInMillis < 1) ? DEFAULT_TIMEOUT : timeoutInMillis;
 		this.serializer = serializer;

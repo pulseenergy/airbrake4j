@@ -27,7 +27,7 @@ public class AbstractLog4jHttpAppenderTest {
 	@Captor
 	private ArgumentCaptor<String> notificationCaptor;
 
-	private final class StubAirbrakeLog4jAppender extends AbstractLog4jHttpAppender<String> {
+	private final class StubLog4jAppender extends AbstractLog4jHttpAppender<String> {
 		@Override
 		protected HttpNotificationBuilder<String, LoggingEvent> buildNotificationGenerator() {
 			return notificationGenerator;
@@ -42,7 +42,7 @@ public class AbstractLog4jHttpAppenderTest {
 	private static final Logger LOGGER = Logger.getLogger(AbstractLog4jHttpAppenderTest.class);
 	private static final String EXPECTED_MESSAGE = "This is the expected message";
 	private static final Throwable SIMPLE_EXCEPTION = new RuntimeException("SIMULATED EXCEPTION");
-	private final AbstractLog4jHttpAppender httpAppender = new StubAirbrakeLog4jAppender();
+	private final AbstractLog4jHttpAppender httpAppender = new StubLog4jAppender();
 
 
 	@Test

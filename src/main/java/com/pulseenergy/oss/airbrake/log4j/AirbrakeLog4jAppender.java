@@ -6,7 +6,7 @@ import static com.pulseenergy.oss.airbrake.AirbrakeUtil.getAirbrakeUriOrDefault;
 import org.apache.log4j.spi.LoggingEvent;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.logging.http.javanet.JavaNetAirbrakeNotifier;
+import com.pulseenergy.oss.logging.http.javanet.JavaNetNotificationSender;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
 import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
@@ -23,7 +23,7 @@ public class AirbrakeLog4jAppender extends AbstractLog4jHttpAppender<Airbrake4jN
 	private String componentName;
 
 	protected HttpNotificationSender<Airbrake4jNotice> buildNotificationSender() {
-		return new JavaNetAirbrakeNotifier(getAirbrakeUriOrDefault(airbrakeUri), timeoutInMillis, useSSL, new AirbrakeDomXmlSerializer(), POST_CONTENT_TYPE);
+		return new JavaNetNotificationSender(getAirbrakeUriOrDefault(airbrakeUri), timeoutInMillis, useSSL, new AirbrakeDomXmlSerializer(), POST_CONTENT_TYPE);
 	}
 
 	protected HttpNotificationBuilder<Airbrake4jNotice, LoggingEvent> buildNotificationGenerator() {
