@@ -15,9 +15,8 @@ import java.util.logging.Logger;
 import org.apache.commons.lang.StringUtils;
 
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
-import com.pulseenergy.oss.logging.NotificationSerializer;
 
-public abstract class AbstractJavaNetNotificationSender<T> implements HttpNotificationSender<T> {
+public abstract class AbstractJavaNetNotificationSender implements HttpNotificationSender {
 	private static final String ERR_UNEXPECTED_RESPONSE = "Service responded with an unexpected response code %d:\n%s\n\nSupplied POST data:\n%s";
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetNotificationSender.class.getName());
@@ -26,20 +25,15 @@ public abstract class AbstractJavaNetNotificationSender<T> implements HttpNotifi
 	private static final String HTTP = "http://";
 	private static final String HTTPS = "https://";
 	private final int timeoutInMillis;
-	private final NotificationSerializer<String, T> serializer;
 	private final String uri;
-	private String contentType;
 
-	public AbstractJavaNetNotificationSender(final String uri, final int timeoutInMillis, final boolean useSSL, final NotificationSerializer<String, T> serializer, final String contentType) {
+	public AbstractJavaNetNotificationSender(final String uri, final int timeoutInMillis, final boolean useSSL) {
 		this.uri = buildNotificationUri(uri, useSSL);
 		this.timeoutInMillis = (timeoutInMillis < 1) ? DEFAULT_TIMEOUT : timeoutInMillis;
-		this.serializer = serializer;
-		this.contentType = contentType;
 	}
 
 	@Override
-	public void send(final T notification) throws IOException {
-		final String postData = serializer.serialize(notification);
+	public void send(final String postData, final String contentType) throws IOException {
 		final HttpURLConnection connection = getHttpConnection(uri);
 		connection.setConnectTimeout(timeoutInMillis);
 		connection.setReadTimeout(timeoutInMillis);

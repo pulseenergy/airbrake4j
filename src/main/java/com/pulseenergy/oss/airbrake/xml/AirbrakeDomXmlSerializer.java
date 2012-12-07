@@ -20,6 +20,7 @@ import com.pulseenergy.oss.logging.NotificationSerializer;
 
 public class AirbrakeDomXmlSerializer implements NotificationSerializer<String, Airbrake4jNotice> {
 	private static final String CAUSED_BY = "Caused by ";
+	private static final String CONTENT_TYPE = "text/xml";
 
 	public static class XmlSerializationException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
@@ -43,6 +44,11 @@ public class AirbrakeDomXmlSerializer implements NotificationSerializer<String, 
 		addServerEnvironment(document, notice, notification);
 		addRequest(document, notice, notification);
 		return generateXml(document);
+	}
+
+	@Override
+	public String getContentType() {
+		return CONTENT_TYPE;
 	}
 
 	private Document createDocument() {

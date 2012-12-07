@@ -1,12 +1,11 @@
 package com.pulseenergy.oss.airbrake.logback;
 
-import static com.pulseenergy.oss.airbrake.AirbrakeUtil.POST_CONTENT_TYPE;
 import static com.pulseenergy.oss.airbrake.AirbrakeUtil.getAirbrakeUriOrDefault;
 
-import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.logging.http.javanet.JavaNetNotificationSender;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
+import com.pulseenergy.oss.logging.NotificationSerializer;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
+import com.pulseenergy.oss.logging.http.javanet.JavaNetNotificationSender;
 import com.pulseenergy.oss.logging.logback.AbstractLogbackHttpAppenderBase;
 
 public class AirbrakeLogbackAppender extends AbstractLogbackHttpAppenderBase {
@@ -46,10 +45,15 @@ public class AirbrakeLogbackAppender extends AbstractLogbackHttpAppenderBase {
 		this.componentName = componentName;
 	}
 
-	protected HttpNotificationSender<Airbrake4jNotice> buildNotificationSender(){
-		return new JavaNetNotificationSender(getAirbrakeUriOrDefault(airbrakeUri), timeoutInMillis, useSSL, new AirbrakeDomXmlSerializer(), POST_CONTENT_TYPE);
+	protected HttpNotificationSender buildNotificationSender(){
+		return new JavaNetNotificationSender(getAirbrakeUriOrDefault(airbrakeUri), timeoutInMillis, useSSL);
 	}
 
+
+	@Override
+	protected NotificationSerializer buildNotificationSerializer() {
+		return new AirbrakeDomXmlSerializer();
+	}
 
 	protected LogbackAirbrakeNotificationBuilder buildNotificationGenerator() {
 		return new LogbackAirbrakeNotificationBuilder(apiKey, environment, nodeName, componentName);

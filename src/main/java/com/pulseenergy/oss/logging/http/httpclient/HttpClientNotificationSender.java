@@ -10,27 +10,22 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 
-import com.pulseenergy.oss.logging.NotificationSerializer;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
-public class HttpClientNotificationSender<T> implements HttpNotificationSender<T> {
+public class HttpClientNotificationSender<T> implements HttpNotificationSender {
 	private static final String CHARSET_NAME = "UTF-8";
 	private final HttpClient httpClient;
 	private final String uri;
-	private final NotificationSerializer<String, T> serializer;
-	private final String contentType;
 
-	public HttpClientNotificationSender(final String uri, final HttpClient httpClient, final NotificationSerializer<String, T> serializer, final String contentType) {
+	public HttpClientNotificationSender(final String uri, final HttpClient httpClient) {
 		this.httpClient = httpClient;
 		this.uri = uri;
-		this.serializer = serializer;
-		this.contentType = contentType;
 	}
 
 	@Override
-	public void send(final T notification) throws IOException {
+	public void send(final String notification, final String contentType) throws IOException {
 		final PostMethod method = new PostMethod(uri);
-		method.setRequestEntity(new StringRequestEntity(serializer.serialize(notification), contentType, CHARSET_NAME));
+		method.setRequestEntity(new StringRequestEntity(notification, contentType, CHARSET_NAME));
 		final int httpStatus = httpClient.executeMethod(method);
 		if (httpStatus != HttpStatus.SC_OK) {
 			System.err.printf("ERROR: Received unexpected response code %d from service: %s\n", httpStatus, responseBodyToString(method));

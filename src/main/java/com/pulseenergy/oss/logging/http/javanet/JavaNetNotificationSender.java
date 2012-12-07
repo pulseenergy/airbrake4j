@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.pulseenergy.oss.logging.NotificationSerializer;
+public class JavaNetNotificationSender extends AbstractJavaNetNotificationSender {
 
-public class JavaNetNotificationSender<T> extends AbstractJavaNetNotificationSender<T> {
-
-	public JavaNetNotificationSender(final String uri, final int timeoutInMillis, final boolean useSSL, final NotificationSerializer<String, T> serializer, final String contentType) {
-		super(uri, timeoutInMillis, useSSL, serializer, contentType);
+	public JavaNetNotificationSender(final String uri, final int timeoutInMillis, final boolean useSSL) {
+		super(uri, timeoutInMillis, useSSL);
 	}
 
 	@Override

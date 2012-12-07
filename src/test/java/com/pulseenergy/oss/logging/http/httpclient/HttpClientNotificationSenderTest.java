@@ -46,25 +46,25 @@ public class HttpClientNotificationSenderTest {
 	private HttpClient httpClient;
 	@Mock
 	private NotificationSerializer<String, String> serializer;
-	private HttpNotificationSender<String> notificationSender;
+	private HttpNotificationSender notificationSender;
 
 	@Before
 	public void setUp() {
-		notificationSender = new HttpClientNotificationSender<String>(EXPECTED_URL, httpClient, serializer, EXPECTED_CONTENT_TYPE);
+		notificationSender = new HttpClientNotificationSender<String>(EXPECTED_URL, httpClient);
 	}
 
 	@Test
 	public void sendErrorNotification() throws Exception {
 		when(serializer.serialize(anyString())).thenReturn(SERIALIZE_MESSAGE);
 		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_OK));
-		notificationSender.send("notification");
+		notificationSender.send("notification", EXPECTED_CONTENT_TYPE);
 	}
 
 	@Test
 	public void sendInvalidErrorNotification() throws Exception {
 		when(serializer.serialize(anyString())).thenReturn(SERIALIZE_MESSAGE);
 		when(httpClient.executeMethod(isA(PostMethod.class))).thenAnswer(new ExecutePostMethodAnswer(HttpStatus.SC_UNPROCESSABLE_ENTITY));
-		notificationSender.send("notification");
+		notificationSender.send("notification", EXPECTED_CONTENT_TYPE);
 	}
 
 	private static void assertProperlyConfiguredMethod(final PostMethod method) {

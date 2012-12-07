@@ -28,9 +28,9 @@ public class AbstractJavaNetNotificationSenderTest {
 	private NotificationSerializer<String, String> notificationSerializer;
 	private static final String SERIALIZED_MESSAGE = "SERIALIZED";
 
-	private class StubJavaNetNotifier extends AbstractJavaNetNotificationSender<String> {
+	private class StubJavaNetNotifier extends AbstractJavaNetNotificationSender {
 		public StubJavaNetNotifier(final String uri, final int timeoutInMillis) {
-			super(uri, timeoutInMillis, true, notificationSerializer, "text/xml; charset=UTF-8");
+			super(uri, timeoutInMillis, true);
 		}
 
 		@Override
@@ -49,12 +49,12 @@ public class AbstractJavaNetNotificationSenderTest {
 	@Test
 	public void send() throws Exception {
 		final int expectedTimeout = 1999;
-		final HttpNotificationSender<String> notifier = new StubJavaNetNotifier(URI, expectedTimeout);
+		final HttpNotificationSender notifier = new StubJavaNetNotifier(URI, expectedTimeout);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(200);
 		final String notification = "HELLO WORLD";
 		when(notificationSerializer.serialize(notification)).thenReturn(SERIALIZED_MESSAGE);
-		notifier.send(notification);
+		notifier.send(notification, "text/plain");
 		verify(httpConnection).setConnectTimeout(expectedTimeout);
 		verify(httpConnection).setReadTimeout(expectedTimeout);
 		verify(outputStream).write(byteArrayCaptor.capture());
@@ -66,12 +66,12 @@ public class AbstractJavaNetNotificationSenderTest {
 
 	@Test(expected = IOException.class)
 	public void sendResultingInFailureFromService() throws Exception {
-		final HttpNotificationSender<String> notifier = new StubJavaNetNotifier(URI, 1999);
+		final HttpNotificationSender notifier = new StubJavaNetNotifier(URI, 1999);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(413);
 		when(httpConnection.getErrorStream()).thenReturn(new ByteArrayInputStream("THIS IS THE RESPONSE".getBytes()));
 		final String notification = "HELLO WORLD";
 		when(notificationSerializer.serialize(notification)).thenReturn(SERIALIZED_MESSAGE);
-		notifier.send(notification);
+		notifier.send(notification, "text/plain");
 	}
 }

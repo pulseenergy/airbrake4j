@@ -2,6 +2,7 @@ package com.pulseenergy.oss.logging.log4j;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -15,26 +16,35 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.pulseenergy.oss.logging.NotificationSerializer;
 import com.pulseenergy.oss.logging.http.HttpNotificationBuilder;
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractLog4jHttpAppenderTest {
+	private static final String EXPECTED_CONTENT_TYPE = "text/plain";
 	@Mock
 	private HttpNotificationBuilder<String, LoggingEvent> notificationGenerator;
 	@Mock
-	private HttpNotificationSender<String> notificationSender;
+	private NotificationSerializer<String, String> serializer;
+	@Mock
+	private HttpNotificationSender notificationSender;
 	@Captor
 	private ArgumentCaptor<String> notificationCaptor;
 
 	private final class StubLog4jAppender extends AbstractLog4jHttpAppender<String> {
+		@Override
+		protected NotificationSerializer<String, String> buildNotificationSerializer() {
+			return serializer;
+		}
+
 		@Override
 		protected HttpNotificationBuilder<String, LoggingEvent> buildNotificationGenerator() {
 			return notificationGenerator;
 		}
 
 		@Override
-		protected HttpNotificationSender<String> buildNotificationSender() {
+		protected HttpNotificationSender buildNotificationSender() {
 			return notificationSender;
 		}
 	}
@@ -50,8 +60,10 @@ public class AbstractLog4jHttpAppenderTest {
 		httpAppender.activateOptions();
 		final LoggingEvent event = new LoggingEvent(getClass().getName(), LOGGER, Level.WARN, EXPECTED_MESSAGE, SIMPLE_EXCEPTION);
 		when(notificationGenerator.build(event)).thenReturn(EXPECTED_MESSAGE);
+		when(serializer.serialize(EXPECTED_MESSAGE)).thenReturn(EXPECTED_MESSAGE);
+		when(serializer.getContentType()).thenReturn(EXPECTED_CONTENT_TYPE);
 		httpAppender.doAppend(event);
-		verify(notificationSender).send(notificationCaptor.capture());
+		verify(notificationSender).send(notificationCaptor.capture(), eq(EXPECTED_CONTENT_TYPE));
 		final String notification = notificationCaptor.getValue();
 		assertThat(notification, is(EXPECTED_MESSAGE));
 	}

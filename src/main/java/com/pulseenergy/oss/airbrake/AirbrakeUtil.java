@@ -3,7 +3,6 @@ package com.pulseenergy.oss.airbrake;
 import org.apache.commons.lang.StringUtils;
 
 public class AirbrakeUtil {
-	public static final String POST_CONTENT_TYPE = "text/xml; charset=UTF-8";
 
 	private AirbrakeUtil() {
 	}
