@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
+import com.pulseenergy.oss.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class HttpClientAirbrakeNotifierTest {
@@ -41,7 +41,7 @@ public class HttpClientAirbrakeNotifierTest {
 	private static final String EXPECTED_URL = "http://unit.test/";
 	@Mock
 	private HttpClient httpClient;
-	private AirbrakeNotifier airbrakeNotifier;
+	private HttpNotificationSender<Airbrake4jNotice> airbrakeNotifier;
 
 	@Before
 	public void setUp() {

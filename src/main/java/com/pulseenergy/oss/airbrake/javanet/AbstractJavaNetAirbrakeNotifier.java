@@ -13,10 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
+import com.pulseenergy.oss.http.HttpNotificationSender;
 
-public abstract class AbstractJavaNetAirbrakeNotifier implements AirbrakeNotifier {
+public abstract class AbstractJavaNetAirbrakeNotifier implements HttpNotificationSender<Airbrake4jNotice> {
 	private static final String ERR_UNEXPECTED_RESPONSE = "Airbrake responded with an unexpected response code %d:\n%s\n\nSupplied XML:\n%s";
 	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private static final Logger LOGGER = Logger.getLogger(AbstractJavaNetAirbrakeNotifier.class.getName());

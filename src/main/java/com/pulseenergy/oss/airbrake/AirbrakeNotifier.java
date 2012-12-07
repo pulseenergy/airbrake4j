@@ -1,10 +1,7 @@
 package com.pulseenergy.oss.airbrake;
 
-import java.io.IOException;
+import com.pulseenergy.oss.http.HttpNotificationSender;
 
 
-public interface AirbrakeNotifier {
-
-	void send(final Airbrake4jNotice notification) throws IOException;
-
+public interface AirbrakeNotifier extends HttpNotificationSender<Airbrake4jNotice> {
 }

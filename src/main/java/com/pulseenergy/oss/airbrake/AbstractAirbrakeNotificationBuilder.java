@@ -1,6 +1,8 @@
 package com.pulseenergy.oss.airbrake;
 
-public abstract class AbstractAirbrakeNotificationBuilder<T, U> {
+import com.pulseenergy.oss.http.HttpNotificationBuilder;
+
+public abstract class AbstractAirbrakeNotificationBuilder<T, U> implements HttpNotificationBuilder<Airbrake4jNotice, T> {
 	private final String apiKey;
 	private final String environment;
 	private final String nodeName;
@@ -13,6 +15,7 @@ public abstract class AbstractAirbrakeNotificationBuilder<T, U> {
 		this.componentName = componentName;
 	}
 
+	@Override
 	public final Airbrake4jNotice build(final T event) {
 		final Airbrake4jNotice notification = new Airbrake4jNotice();
 		notification.setApiKey(apiKey);

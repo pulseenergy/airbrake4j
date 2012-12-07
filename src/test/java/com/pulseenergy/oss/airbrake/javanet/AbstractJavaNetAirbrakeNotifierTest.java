@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
+import com.pulseenergy.oss.http.HttpNotificationSender;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractJavaNetAirbrakeNotifierTest {
@@ -44,7 +44,7 @@ public class AbstractJavaNetAirbrakeNotifierTest {
 	@Test
 	public void send() throws Exception {
 		final int expectedTimeout = 1999;
-		final AirbrakeNotifier notifier = new StubJavaNetAirbrakeNotifier(null, expectedTimeout);
+		final HttpNotificationSender<Airbrake4jNotice> notifier = new StubJavaNetAirbrakeNotifier(null, expectedTimeout);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(200);
 		notifier.send(new Airbrake4jNotice());
@@ -59,7 +59,7 @@ public class AbstractJavaNetAirbrakeNotifierTest {
 
 	@Test(expected = IOException.class)
 	public void sendResultingInFailureFromAirbrake() throws Exception {
-		final AirbrakeNotifier notifier = new StubJavaNetAirbrakeNotifier(null, 1999);
+		final HttpNotificationSender<Airbrake4jNotice> notifier = new StubJavaNetAirbrakeNotifier(null, 1999);
 		when(httpConnection.getOutputStream()).thenReturn(outputStream);
 		when(httpConnection.getResponseCode()).thenReturn(413);
 		when(httpConnection.getErrorStream()).thenReturn(new ByteArrayInputStream("THIS IS THE RESPONSE".getBytes()));

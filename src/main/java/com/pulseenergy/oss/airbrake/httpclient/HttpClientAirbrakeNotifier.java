@@ -12,10 +12,10 @@ import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.apache.commons.lang.StringUtils;
 
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
-import com.pulseenergy.oss.airbrake.AirbrakeNotifier;
 import com.pulseenergy.oss.airbrake.xml.AirbrakeDomXmlSerializer;
+import com.pulseenergy.oss.http.HttpNotificationSender;
 
-public class HttpClientAirbrakeNotifier implements AirbrakeNotifier {
+public class HttpClientAirbrakeNotifier implements HttpNotificationSender<Airbrake4jNotice> {
 	private static final String CHARSET_NAME = "UTF-8";
 	private static final String CONTENT_TYPE = "text/xml";
 	private static final String DEFAULT_AIRBRAKE_URI = "http://airbrakeapp.com/notifier_api/v2/notices";
