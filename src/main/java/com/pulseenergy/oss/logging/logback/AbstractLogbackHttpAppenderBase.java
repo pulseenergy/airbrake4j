@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.logback;
+package com.pulseenergy.oss.logging.logback;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;

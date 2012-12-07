@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.log4j;
+package com.pulseenergy.oss.logging.log4j;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.spi.LoggingEvent;

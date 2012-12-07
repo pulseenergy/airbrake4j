@@ -3,7 +3,7 @@ package com.pulseenergy.oss.airbrake.logback;
 import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
 import com.pulseenergy.oss.airbrake.javanet.JavaNetAirbrakeNotifier;
 import com.pulseenergy.oss.http.HttpNotificationSender;
-import com.pulseenergy.oss.logback.AbstractLogbackHttpAppenderBase;
+import com.pulseenergy.oss.logging.logback.AbstractLogbackHttpAppenderBase;
 
 public class AirbrakeLogbackAppender extends AbstractLogbackHttpAppenderBase {
 	private String apiKey;

@@ -1,4 +1,4 @@
-package com.pulseenergy.oss.log4j;
+package com.pulseenergy.oss.logging.log4j;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;

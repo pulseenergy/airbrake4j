@@ -6,7 +6,7 @@ import com.pulseenergy.oss.airbrake.Airbrake4jNotice;
 import com.pulseenergy.oss.airbrake.javanet.JavaNetAirbrakeNotifier;
 import com.pulseenergy.oss.http.HttpNotificationBuilder;
 import com.pulseenergy.oss.http.HttpNotificationSender;
-import com.pulseenergy.oss.log4j.AbstractLog4jHttpAppender;
+import com.pulseenergy.oss.logging.log4j.AbstractLog4jHttpAppender;
 
 public class AirbrakeLog4jAppender extends AbstractLog4jHttpAppender<Airbrake4jNotice> {
 
