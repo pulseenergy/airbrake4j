@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d [%t] %-5p %c - %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="airbrake4j"
+              class="com.pulseenergy.oss.airbrake.log4j.AirbrakeLog4jAppender">
+        <param name="apiKey" value="${airbrake4j.apiKey}"/>
+        <param name="nodeName" value="${user.name}"/>
+        <param name="componentName"
+               value="${project.groupId}:${project.artifactId}:${project.version}"/>
+        <param name="timeoutInMillis" value="2000"/>
+        <param name="useSSL" value="false"/>
+        <param name="Threshold" value="WARN"/>
+        <param name="environment" value="INTEGRATION_TEST"/>
+    </appender>
+
+    <appender name="async" class="org.apache.log4j.AsyncAppender">
+        <param name="bufferSize" value="1000"/>
+        <param name="blocking" value="false"/>
+        <appender-ref ref="airbrake4j"/>
+    </appender>
+
+
+    <logger name="httpclient">
+        <level value="warn"/>
+    </logger>
+
+    <logger name="org.apache.commons.httpclient.HttpClient">
+        <level value="warn"/>
+    </logger>
+
+    <root>
+        <priority value="all"/>
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="async"/>
+    </root>
+</log4j:configuration>

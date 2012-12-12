@@ -14,32 +14,33 @@ import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 public abstract class AbstractLogbackHttpAppenderBase<T> extends AppenderBase<ILoggingEvent> {
 	private static final int MAX_QUEUED_MESSAGES = 1000;
-	private final HttpNotificationSender notificationSender;
-	private final HttpNotificationBuilder<T, ILoggingEvent> notificationBuilder;
+	private HttpNotificationBuilder<T, ILoggingEvent> notificationBuilder;
 	private final ExecutorService executorService;
 	private final LinkedBlockingQueue<String> workQueue;
-	private final NotificationSerializer<String, T> serializer;
+	private NotificationSerializer<String, T> serializer;
 
 	protected AbstractLogbackHttpAppenderBase() {
 		super();
 		this.executorService = Executors.newSingleThreadExecutor();
-		this.notificationSender = buildNotificationSender();
-		this.notificationBuilder = buildNotificationGenerator();
-		this.serializer = buildNotificationSerializer();
 		this.workQueue = new LinkedBlockingQueue<String>(MAX_QUEUED_MESSAGES);
 	}
 
 	protected abstract NotificationSerializer<String,T> buildNotificationSerializer();
 
+
 	@Override
 	public void start() {
 		super.start();
-		executorService.execute(new AsynchronousNotificationHandler(notificationSender, workQueue, serializer.getContentType(), new NotificationErrorHandler() {
+		this.notificationBuilder = buildNotificationGenerator();
+		this.serializer = buildNotificationSerializer();
+		final NotificationErrorHandler errorHandler = new NotificationErrorHandler() {
 			@Override
 			public void handleError(final String message, final Throwable e) {
 				addError(message, e);
 			}
-		}));
+		};
+		final AsynchronousNotificationHandler handler = new AsynchronousNotificationHandler(buildNotificationSender(), workQueue, serializer.getContentType(), errorHandler);
+		executorService.execute(handler);
 		startInternal();
 	}
 

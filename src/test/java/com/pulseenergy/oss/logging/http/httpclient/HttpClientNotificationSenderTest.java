@@ -26,9 +26,7 @@ import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 @RunWith(MockitoJUnitRunner.class)
 public class HttpClientNotificationSenderTest {
 	private static final String SERIALIZE_MESSAGE = "SERIALIZED";
-	private static final String EXPECTED_CHARSET_NAME = "UTF-8";
 	private static final String MIME_TYPE = "text/xml";
-	private static final String EXPECTED_CONTENT_TYPE = String.format("%s; charset=%s", MIME_TYPE, EXPECTED_CHARSET_NAME);
 	private static final String EXPECTED_URL = "http://unit.test/";
 	@Mock
 	private HttpClient httpClient;

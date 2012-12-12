@@ -1,6 +1,7 @@
 package com.pulseenergy.oss.airbrake4j.it;
 
 import org.apache.log4j.Logger;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 public class Airbrake4jLog4jIT {
@@ -31,6 +32,11 @@ public class Airbrake4jLog4jIT {
 				LOGGER.error("Error message with simulated nested exception", another);
 			}
 		}
+	}
+
+	@AfterClass
+	public static void tearDownClass() throws InterruptedException {
+		Thread.sleep(10000);
 	}
 
 	private void throwNewException(final String exceptionMessage) throws Exception {
