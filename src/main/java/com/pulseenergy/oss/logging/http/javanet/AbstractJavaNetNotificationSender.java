@@ -12,8 +12,6 @@ import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
 public abstract class AbstractJavaNetNotificationSender implements HttpNotificationSender {
@@ -55,9 +53,6 @@ public abstract class AbstractJavaNetNotificationSender implements HttpNotificat
 	}
 
 	private String buildNotificationUri(final String uri, final boolean useSSL) {
-		if (StringUtils.isBlank(uri)) {
-			throw new IllegalArgumentException("URI cannot be empty.");
-		}
 		if (useSSL && uri.startsWith(HTTP)) {
 			return uri.replaceFirst(HTTP, HTTPS);
 		}
