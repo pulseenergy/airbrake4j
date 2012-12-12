@@ -61,14 +61,15 @@ public class AbstractLogbackHttpAppenderBaseTest {
 	public void setUp() throws Exception {
 		when(serializer.getContentType()).thenReturn(EXPECTED_CONTENT_TYPE);
 		appender = new StubLogbackAppender();
-		appender.start();
 	}
 
 	@Test
 	public void testAppend() throws IOException {
+		appender.start();
 		when(notificationGenerator.build(eventObject)).thenReturn(MESSAGE);
 		when(serializer.serialize(MESSAGE)).thenReturn(MESSAGE);
 		appender.append(eventObject);
+		appender.stop();
 		verify(notificationSender).send(notificationCaptor.capture(), eq(EXPECTED_CONTENT_TYPE));
 		String notification = notificationCaptor.getValue();
 		assertThat(notification, is(MESSAGE));
@@ -76,6 +77,5 @@ public class AbstractLogbackHttpAppenderBaseTest {
 
 	@After
 	public void tearDown () {
-		appender.stop();
 	}
 }

@@ -4,16 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 
 import com.pulseenergy.oss.logging.http.HttpNotificationSender;
 
-public class HttpClientNotificationSender<T> implements HttpNotificationSender {
-	private static final String CHARSET_NAME = "UTF-8";
+public class HttpClientNotificationSender implements HttpNotificationSender {
+	private static final Charset CHARSET = Charset.forName("UTF-8");
 	private final HttpClient httpClient;
 	private final String uri;
 
@@ -24,16 +27,18 @@ public class HttpClientNotificationSender<T> implements HttpNotificationSender {
 
 	@Override
 	public void send(final String notification, final String contentType) throws IOException {
-		final PostMethod method = new PostMethod(uri);
-		method.setRequestEntity(new StringRequestEntity(notification, contentType, CHARSET_NAME));
-		final int httpStatus = httpClient.executeMethod(method);
-		if (httpStatus != HttpStatus.SC_OK) {
-			System.err.printf("ERROR: Received unexpected response code %d from service: %s\n", httpStatus, responseBodyToString(method));
+		final HttpPost method = new HttpPost(uri);
+		method.setEntity(new StringEntity(notification, ContentType.create(contentType, CHARSET)));
+		final HttpResponse httpResponse = httpClient.execute(method);
+
+		final int statusCode = httpResponse.getStatusLine().getStatusCode();
+		if (statusCode != HttpStatus.SC_OK) {
+			System.err.printf("ERROR: Received unexpected response code %d from service: %s%n", statusCode, responseBodyToString(httpResponse));
 		}
 	}
 
-	private String responseBodyToString(final PostMethod method) throws IOException {
-		final InputStream stream = method.getResponseBodyAsStream();
+	private String responseBodyToString(final HttpResponse response) throws IOException {
+		final InputStream stream = response.getEntity().getContent();
 		if (stream == null) {
 			return "";
 		}

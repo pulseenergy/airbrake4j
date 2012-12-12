@@ -34,7 +34,12 @@ public abstract class AbstractLogbackHttpAppenderBase<T> extends AppenderBase<IL
 	@Override
 	public void start() {
 		super.start();
-		executorService.execute(new AsynchronousNotificationHandler(notificationSender, workQueue, serializer.getContentType()));
+		executorService.execute(new AsynchronousNotificationHandler(notificationSender, workQueue, serializer.getContentType(), new NotificationErrorHandler() {
+			@Override
+			public void handleError(final String message, final Throwable e) {
+				addError(message, e);
+			}
+		}));
 		startInternal();
 	}
 
@@ -87,11 +92,13 @@ public abstract class AbstractLogbackHttpAppenderBase<T> extends AppenderBase<IL
 		private final LinkedBlockingQueue<String> workQueue;
 		public static final String POISON_PILL = "POISON_PILL";
 		private final String contentType;
+		private final NotificationErrorHandler errorHandler;
 
-		public AsynchronousNotificationHandler(final HttpNotificationSender notificationSender, final LinkedBlockingQueue<String> workQueue, final String contentType) {
+		public AsynchronousNotificationHandler(final HttpNotificationSender notificationSender, final LinkedBlockingQueue<String> workQueue, final String contentType, final NotificationErrorHandler errorHandler) {
 			this.notificationSender = notificationSender;
 			this.workQueue = workQueue;
 			this.contentType = contentType;
+			this.errorHandler = errorHandler;
 		}
 
 		@Override
@@ -104,13 +111,18 @@ public abstract class AbstractLogbackHttpAppenderBase<T> extends AppenderBase<IL
 					}
 					notificationSender.send(item, contentType);
 				} catch (InterruptedException e) {
-					// TODO Error handler
 					Thread.currentThread().interrupt();
+					errorHandler.handleError("Interrupted while waiting for a work item. Likely due to a shutdown.", e);
 					return;
 				} catch (Exception e) {
-					// TODO Error handler
+					errorHandler.handleError("Unexpected error while processing work queue", e);
 				}
+
 			}
 		}
+	}
+
+	public interface NotificationErrorHandler {
+		void handleError(final String message, final Throwable e);
 	}
 }
