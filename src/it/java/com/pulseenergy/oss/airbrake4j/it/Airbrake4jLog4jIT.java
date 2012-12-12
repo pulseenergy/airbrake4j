@@ -1,5 +1,6 @@
 package com.pulseenergy.oss.airbrake4j.it;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -36,7 +37,7 @@ public class Airbrake4jLog4jIT {
 
 	@AfterClass
 	public static void tearDownClass() throws InterruptedException {
-		Thread.sleep(10000);
+		LogManager.shutdown();
 	}
 
 	private void throwNewException(final String exceptionMessage) throws Exception {
