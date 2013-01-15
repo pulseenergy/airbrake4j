@@ -31,7 +31,7 @@ public class AirbrakeDomXmlSerializer implements NotificationSerializer<String, 
 
 	}
 
-	private static final String INDENT = "'      ";
+	private static final String INDENT = ".      ";
 
 	public String serialize(final Airbrake4jNotice notification) {
 		final Document document = createDocument();
