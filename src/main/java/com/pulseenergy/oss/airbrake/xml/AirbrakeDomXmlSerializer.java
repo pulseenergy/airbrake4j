@@ -66,7 +66,7 @@ public class AirbrakeDomXmlSerializer implements NotificationSerializer<String, 
 			final StringWriter stringWriter = new StringWriter();
 			final StreamResult result = new StreamResult(stringWriter);
 			transformer.transform(new DOMSource(document), result);
-			return stringWriter.toString().replaceAll("'", "`");
+			return stringWriter.toString();
 		} catch (final TransformerConfigurationException e) {
 			throw new XmlSerializationException("Could not create an XML Transformer", e);
 		} catch (final TransformerException e) {
